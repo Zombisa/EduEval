@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from .views import TblDocenteViewSet
 
 router = DefaultRouter()
-router.register(r'', TblDocenteViewSet)
+router.register(r'docente', TblDocenteViewSet, basename='docente')
 
 urlpatterns = [
     path('', include(router.urls)),

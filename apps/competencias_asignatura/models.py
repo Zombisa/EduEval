@@ -5,6 +5,7 @@ class AsigCompDocente(models.Model):
     doc_id = models.IntegerField()
     comp_id = models.IntegerField()
     periodo = models.CharField(max_length=20)
+    activo = models.BooleanField(default=True)
 
     class Meta:
         db_table = 'ASIG_COMP_DOCENTE'
@@ -16,6 +17,7 @@ class TblAsignatura(models.Model):
     asig_creditos = models.IntegerField(null=True, blank=True)
     asig_objetivos = models.CharField(max_length=500, null=True, blank=True)
     asig_semestre = models.IntegerField(null=True, blank=True)
+    activo = models.BooleanField(default=True)
 
     class Meta:
         db_table = 'TBL_ASIGNATURA'

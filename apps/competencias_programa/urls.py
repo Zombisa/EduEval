@@ -5,6 +5,9 @@ from .views import TblCompetenciaViewSet
 router = DefaultRouter()
 router.register(r'competencia', TblCompetenciaViewSet)
 
+router = DefaultRouter()
+router.register(r'', TblCompetenciaViewSet, basename='competencia')
+
 urlpatterns = [
     path('', include(router.urls)),
 ]

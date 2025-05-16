@@ -1,0 +1,116 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "EduEval API",
+    "dateExported": "2025-05-16",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "1",
+            "name": "Docentes - Crear",
+            "method": "POST",
+            "url": "http://localhost:8000/api/docente/",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": {
+                    "doc_nombres": "Paula",
+                    "doc_apellidos": "Rodr\u00edguez",
+                    "doc_identificacion": "12345678",
+                    "doc_tipoidentificacion": "CC",
+                    "doc_tipodocente": "Titular",
+                    "doc_titulo": "Mag\u00edster"
+                }
+            }
+        },
+        {
+            "_id": "2",
+            "name": "Asignatura - Crear",
+            "method": "POST",
+            "url": "http://localhost:8000/api/asignacion/asignatura/",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": {
+                    "asig_nombre": "Programaci\u00f3n Web",
+                    "asig_creditos": 3,
+                    "asig_objetivos": "Comprender los fundamentos de desarrollo web.",
+                    "asig_semestre": 4
+                }
+            }
+        },
+        {
+            "_id": "3",
+            "name": "Asignaci\u00f3n Competencia-Docente - Crear",
+            "method": "POST",
+            "url": "http://localhost:8000/api/asignacion/asignaciondocente/",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": {
+                    "asig_id": 1,
+                    "doc_id": 1,
+                    "comp_id": 1,
+                    "periodo": "2024-1"
+                }
+            }
+        },
+        {
+            "_id": "4",
+            "name": "Docentes - Listar",
+            "method": "GET",
+            "url": "http://localhost:8000/api/docente/",
+            "headers": []
+        },
+        {
+            "_id": "5",
+            "name": "Docente - Eliminar (id=1)",
+            "method": "DELETE",
+            "url": "http://localhost:8000/api/docente/1/",
+            "headers": []
+        },
+        {
+            "_id": "6",
+            "name": "Asignaturas - Listar",
+            "method": "GET",
+            "url": "http://localhost:8000/api/asignacion/asignatura/",
+            "headers": []
+        },
+        {
+            "_id": "7",
+            "name": "Asignatura - Eliminar (id=1)",
+            "method": "DELETE",
+            "url": "http://localhost:8000/api/asignacion/asignatura/1/",
+            "headers": []
+        },
+        {
+            "_id": "8",
+            "name": "Asignaci\u00f3n Comp-Docente - Listar",
+            "method": "GET",
+            "url": "http://localhost:8000/api/asignacion/asignaciondocente/",
+            "headers": []
+        },
+        {
+            "_id": "9",
+            "name": "Asignaci\u00f3n Comp-Docente - Eliminar (id=1)",
+            "method": "DELETE",
+            "url": "http://localhost:8000/api/asignacion/asignaciondocente/1/",
+            "headers": []
+        }
+    ]
+}

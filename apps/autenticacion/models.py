@@ -8,6 +8,7 @@ class TblDocente(models.Model):
     doc_apellidos = models.CharField(max_length=100)
     doc_identificacion = models.CharField(max_length=100)
     doc_titulo = models.CharField(max_length=100)
+    activo = models.BooleanField(default=True)
 
     class Meta:
         db_table = 'TBL_DOCENTE'

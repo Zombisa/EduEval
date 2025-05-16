@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from .views import EvaluacionPlaceholderViewSet
 
 router = DefaultRouter()
-router.register(r'evaluacionevaluacion', EvaluacionPlaceholderViewSet)
+router.register(r'', EvaluacionPlaceholderViewSet, basename='evaluacion')
 
 urlpatterns = [
     path('', include(router.urls)),
