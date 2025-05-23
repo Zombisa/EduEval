@@ -19,10 +19,11 @@ class CompetenciaAsignatura(models.Model):
         return self.nombre
 
 class ResultadoAprendizajeAsignatura(models.Model):
-    competencia = models.OneToOneField(CompetenciaAsignatura, on_delete=models.CASCADE, related_name='resultado_aprendizaje')
+    nombre = models.CharField(max_length=255, default="Nombre temporal")
     descripcion = models.TextField()
     fecha_creacion = models.DateTimeField(auto_now_add=True)
-    relacionados_programa = models.ManyToManyField(ResultadoAprendizajePrograma, blank=True)
+    competencia = models.OneToOneField(CompetenciaAsignatura, on_delete=models.CASCADE, related_name='resultado_aprendizaje')
+    relacionados_programa = models.ManyToManyField('competencias_programa.ResultadoAprendizajePrograma', blank=True)
 
     def __str__(self):
         return f"RA de {self.competencia.nombre}"

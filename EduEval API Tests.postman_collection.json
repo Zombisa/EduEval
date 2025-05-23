@@ -1,0 +1,232 @@
+{
+	"info": {
+		"_postman_id": "0fc61ff8-a89c-414d-aec6-5214af7c6756",
+		"name": "EduEval API Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40286637"
+	},
+	"item": [
+		{
+			"name": "Crear Competencia de Programa",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"nombre\": \"Pensamiento Cr\\u00edtico\",\n  \"descripcion\": \"Capacidad para analizar y resolver problemas complejos.\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/competencias-programa/competencias/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"competencias-programa",
+						"competencias",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Asignatura",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"nombre\": \"Cálculo Integral\",\r\n  \"descripcion\": \"Asignatura de segundo semestre\",\r\n  \"creditos\": 3,\r\n  \"semestre\": 2\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/competencias-asignatura/asignaturas/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"competencias-asignatura",
+						"asignaturas",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear competencia de asignatura",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"nombre\": \"Competencia de Cálculo\",\r\n  \"descripcion\": \"Interpreta y aplica derivadas.\",\r\n  \"asignatura\": 1,\r\n  \"resultado_aprendizaje\": {\r\n    \"nombre\": \"RA de derivadas\",\r\n    \"descripcion\": \"Aplica derivadas en contextos reales.\"\r\n  }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/competencias-asignatura/competencias/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"competencias-asignatura",
+						"competencias",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Competencia de asignatura",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/competencias-asignatura/competencias/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"competencias-asignatura",
+						"competencias",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Rúbrica",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"nombre\": \"Rúbrica para evaluación de integrales\",\n  \"descripcion\": \"Evalúa comprensión y aplicación de la integral definida\",\n  \"resultado_aprendizaje\": 1,\n  \"criterios\": [\n    {\n      \"descripcion\": \"Aplica el procedimiento correcto\",\n      \"niveles\": [\n        {\"descripcion\": \"Incorrecto\", \"puntaje\": 0},\n        {\"descripcion\": \"Parcialmente correcto\", \"puntaje\": 1},\n        {\"descripcion\": \"Correcto\", \"puntaje\": 2}\n      ]\n    },\n    {\n      \"descripcion\": \"Interpreta resultados\",\n      \"niveles\": [\n        {\"descripcion\": \"No interpreta\", \"puntaje\": 0},\n        {\"descripcion\": \"Interpretación básica\", \"puntaje\": 1},\n        {\"descripcion\": \"Interpretación completa\", \"puntaje\": 2}\n      ]\n    }\n  ]\n}\n"
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/rubricas/rubricas/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"rubricas",
+						"rubricas",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Evaluación (RA Programa + Rúbrica)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"resultado_aprendizaje_programa\": 1,\n  \"resultado_aprendizaje_asignatura\": 1,\n  \"rubrica_id\": 1\n}\n"
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/evaluaciones/evaluaciones/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"evaluaciones",
+						"evaluaciones",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Competencias de Asignatura",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/competencias-asignatura/resultados",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"competencias-asignatura",
+						"resultados"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

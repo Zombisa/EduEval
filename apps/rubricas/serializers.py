@@ -40,10 +40,11 @@ class RubricaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Rubrica
-        fields = ['id', 'nombre', 'descripcion', 'criterios']
+        fields = ['id', 'nombre', 'descripcion', 'resultado_aprendizaje', 'criterios']
 
     def create(self, validated_data):
         criterios_data = validated_data.pop('criterios')
+        resultado_aprendizaje = validated_data.get('resultado_aprendizaje')
         rubrica = Rubrica.objects.create(**validated_data)
         for criterio_data in criterios_data:
             niveles_data = criterio_data.pop('niveles')
