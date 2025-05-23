@@ -4,14 +4,17 @@ from .models import Rubrica, Criterio, Nivel
 class NivelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Nivel
-        fields = ['id', 'descripcion', 'puntaje', 'criterio']
+        fields = ['id', 'descripcion', 'puntaje']
 
 class CriterioSerializer(serializers.ModelSerializer):
     niveles = NivelSerializer(many=True)
-
+    
     class Meta:
         model = Criterio
         fields = ['id', 'descripcion', 'rubrica', 'niveles']
+        extra_kwargs = {
+            'rubrica': {'read_only': True}
+        }
 
     def create(self, validated_data):
         niveles_data = validated_data.pop('niveles')

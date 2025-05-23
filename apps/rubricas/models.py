@@ -17,9 +17,9 @@ class Criterio(models.Model):
         return f"Criterio de {self.rubrica.nombre}"
 
 class Nivel(models.Model):
-    criterio = models.ForeignKey(Criterio, on_delete=models.CASCADE, related_name='niveles')
-    descripcion = models.TextField()
-    valor = models.PositiveSmallIntegerField()
+    descripcion = models.CharField(max_length=255)
+    puntaje = models.IntegerField(default=0)
+    criterio = models.ForeignKey(Criterio, on_delete=models.CASCADE, related_name="niveles")
 
     def __str__(self):
         return f"Nivel {self.valor} - {self.criterio.rubrica.nombre}"
