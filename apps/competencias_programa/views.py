@@ -1,15 +1,11 @@
-from django.shortcuts import render
 from rest_framework import viewsets
-from .models import TblCompetencia
-from .serializers import TblCompetenciaSerializer
-from rest_framework.response import Response
+from .models import CompetenciaPrograma, ResultadoAprendizajePrograma
+from .serializers import CompetenciaProgramaSerializer, ResultadoAprendizajeProgramaSerializer
 
-class TblCompetenciaViewSet(viewsets.ModelViewSet):
-    queryset = TblCompetencia.objects.filter(activo=True)
-    serializer_class = TblCompetenciaSerializer
+class CompetenciaProgramaViewSet(viewsets.ModelViewSet):
+    queryset = CompetenciaPrograma.objects.all()
+    serializer_class = CompetenciaProgramaSerializer
 
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        instance.activo = False
-        instance.save()
-        return Response(status=204)
+class ResultadoAprendizajeProgramaViewSet(viewsets.ModelViewSet):
+    queryset = ResultadoAprendizajePrograma.objects.all()
+    serializer_class = ResultadoAprendizajeProgramaSerializer

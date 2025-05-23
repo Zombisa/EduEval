@@ -1,15 +1,11 @@
-from django.shortcuts import render
 from rest_framework import viewsets
-from .models import EvaluacionPlaceholder
-from .serializers import EvaluacionPlaceholderSerializer
-from rest_framework.response import Response
+from .models import Evaluacion, DetalleEvaluacion
+from .serializers import EvaluacionSerializer, DetalleEvaluacionSerializer
 
-class EvaluacionPlaceholderViewSet(viewsets.ModelViewSet):
-    queryset = EvaluacionPlaceholder.objects.filter(activo=True)
-    serializer_class = EvaluacionPlaceholderSerializer
+class EvaluacionViewSet(viewsets.ModelViewSet):
+    queryset = Evaluacion.objects.all()
+    serializer_class = EvaluacionSerializer
 
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        instance.activo = False
-        instance.save()
-        return Response(status=204)
+class DetalleEvaluacionViewSet(viewsets.ModelViewSet):
+    queryset = DetalleEvaluacion.objects.all()
+    serializer_class = DetalleEvaluacionSerializer

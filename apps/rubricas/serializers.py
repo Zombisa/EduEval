@@ -1,22 +1,66 @@
 from rest_framework import serializers
-from .models import TblRubrica, TblCriterio, TblNivel, ResultaapRubrica
+from .models import Rubrica, Criterio, Nivel
 
-class TblRubricaSerializer(serializers.ModelSerializer):
+class NivelSerializer(serializers.ModelSerializer):
     class Meta:
-        model = TblRubrica
-        fields = '__all__'
+        model = Nivel
+        fields = ['id', 'descripcion', 'puntaje', 'criterio']
 
-class TblCriterioSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TblCriterio
-        fields = '__all__'
+class CriterioSerializer(serializers.ModelSerializer):
+    niveles = NivelSerializer(many=True)
 
-class TblNivelSerializer(serializers.ModelSerializer):
     class Meta:
-        model = TblNivel
-        fields = '__all__'
+        model = Criterio
+        fields = ['id', 'descripcion', 'rubrica', 'niveles']
 
-class ResultaapRubricaSerializer(serializers.ModelSerializer):
+    def create(self, validated_data):
+        niveles_data = validated_data.pop('niveles')
+        criterio = Criterio.objects.create(**validated_data)
+        for nivel_data in niveles_data:
+            Nivel.objects.create(criterio=criterio, **nivel_data)
+        return criterio
+
+    def update(self, instance, validated_data):
+        niveles_data = validated_data.pop('niveles', [])
+        instance.descripcion = validated_data.get('descripcion', instance.descripcion)
+        instance.save()
+
+        if niveles_data:
+            instance.niveles.all().delete()
+            for nivel_data in niveles_data:
+                Nivel.objects.create(criterio=instance, **nivel_data)
+
+        return instance
+
+class RubricaSerializer(serializers.ModelSerializer):
+    criterios = CriterioSerializer(many=True)
+
     class Meta:
-        model = ResultaapRubrica
-        fields = '__all__'
+        model = Rubrica
+        fields = ['id', 'nombre', 'descripcion', 'criterios']
+
+    def create(self, validated_data):
+        criterios_data = validated_data.pop('criterios')
+        rubrica = Rubrica.objects.create(**validated_data)
+        for criterio_data in criterios_data:
+            niveles_data = criterio_data.pop('niveles')
+            criterio = Criterio.objects.create(rubrica=rubrica, **criterio_data)
+            for nivel_data in niveles_data:
+                Nivel.objects.create(criterio=criterio, **nivel_data)
+        return rubrica
+
+    def update(self, instance, validated_data):
+        criterios_data = validated_data.pop('criterios', [])
+        instance.nombre = validated_data.get('nombre', instance.nombre)
+        instance.descripcion = validated_data.get('descripcion', instance.descripcion)
+        instance.save()
+
+        if criterios_data:
+            instance.criterios.all().delete()
+            for criterio_data in criterios_data:
+                niveles_data = criterio_data.pop('niveles')
+                criterio = Criterio.objects.create(rubrica=instance, **criterio_data)
+                for nivel_data in niveles_data:
+                    Nivel.objects.create(criterio=criterio, **nivel_data)
+
+        return instance

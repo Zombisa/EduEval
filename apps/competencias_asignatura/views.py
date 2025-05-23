@@ -1,25 +1,19 @@
-from django.shortcuts import render
 from rest_framework import viewsets
-from .models import AsigCompDocente, TblAsignatura
-from .serializers import AsigCompDocenteSerializer, TblAsignaturaSerializer
-from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
+from .models import Asignatura, CompetenciaAsignatura, ResultadoAprendizajeAsignatura
+from .serializers import AsignaturaSerializer, CompetenciaAsignaturaSerializer, ResultadoAprendizajeAsignaturaSerializer
 
-class AsigCompDocenteViewSet(viewsets.ModelViewSet):
-    queryset = AsigCompDocente.objects.filter(activo=True)
-    serializer_class = AsigCompDocenteSerializer
+class CompetenciaAsignaturaViewSet(viewsets.ModelViewSet):
+    queryset = CompetenciaAsignatura.objects.all()
+    serializer_class = CompetenciaAsignaturaSerializer
 
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        instance.activo = False
-        instance.save()
-        return Response(status=204)
+class ResultadoAprendizajeAsignaturaViewSet(viewsets.ModelViewSet):
+    queryset = ResultadoAprendizajeAsignatura.objects.all()
+    serializer_class = ResultadoAprendizajeAsignaturaSerializer
 
-class TblAsignaturaViewSet(viewsets.ModelViewSet):
-    queryset = TblAsignatura.objects.filter(activo=True)
-    serializer_class = TblAsignaturaSerializer
+class AsignaturaViewSet(viewsets.ModelViewSet):
+    queryset = Asignatura.objects.all()
+    serializer_class = AsignaturaSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['semestre']
 
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        instance.activo = False
-        instance.save()
-        return Response(status=204)

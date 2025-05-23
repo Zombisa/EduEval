@@ -1,3 +1,11 @@
+0.1 isntalar mysql server y crear la base de datos
+CREATE DATABASE edueval CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+0.2 crear un archivo que se llame .env en la raíz del proyecto, al mismo nivel que manage.py
+DB_NAME=edueval
+DB_USER=//nombre base de datos
+DB_PASSWORD=//contraseña base de datos
+DB_HOST=localhost
+DB_PORT=3306
 1. 
 python -m venv venv
 venv\Scripts\activate

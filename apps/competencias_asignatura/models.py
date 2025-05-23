@@ -1,23 +1,28 @@
 from django.db import models
+from apps.competencias_programa.models import CompetenciaPrograma, ResultadoAprendizajePrograma
 
-class AsigCompDocente(models.Model):
-    asig_id = models.IntegerField()
-    doc_id = models.IntegerField()
-    comp_id = models.IntegerField()
-    periodo = models.CharField(max_length=20)
-    activo = models.BooleanField(default=True)
+class Asignatura(models.Model):
+    nombre = models.CharField(max_length=255)
+    descripcion = models.TextField()
+    creditos = models.PositiveIntegerField()
+    semestre = models.PositiveSmallIntegerField()
 
-    class Meta:
-        db_table = 'ASIG_COMP_DOCENTE'
-        unique_together = (('asig_id', 'doc_id', 'comp_id'),)
+    def __str__(self):
+        return self.nombre
 
-class TblAsignatura(models.Model):
-    asig_id = models.AutoField(primary_key=True)
-    asig_nombre = models.CharField(max_length=100)
-    asig_creditos = models.IntegerField(null=True, blank=True)
-    asig_objetivos = models.CharField(max_length=500, null=True, blank=True)
-    asig_semestre = models.IntegerField(null=True, blank=True)
-    activo = models.BooleanField(default=True)
+class CompetenciaAsignatura(models.Model):
+    asignatura = models.ForeignKey(Asignatura, on_delete=models.CASCADE, related_name='competencias')
+    nombre = models.CharField(max_length=255)
+    descripcion = models.TextField()
 
-    class Meta:
-        db_table = 'TBL_ASIGNATURA'
+    def __str__(self):
+        return self.nombre
+
+class ResultadoAprendizajeAsignatura(models.Model):
+    competencia = models.OneToOneField(CompetenciaAsignatura, on_delete=models.CASCADE, related_name='resultado_aprendizaje')
+    descripcion = models.TextField()
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    relacionados_programa = models.ManyToManyField(ResultadoAprendizajePrograma, blank=True)
+
+    def __str__(self):
+        return f"RA de {self.competencia.nombre}"

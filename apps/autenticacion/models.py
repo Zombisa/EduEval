@@ -12,3 +12,4 @@ class TblDocente(models.Model):
 
     class Meta:
         db_table = 'TBL_DOCENTE'
+

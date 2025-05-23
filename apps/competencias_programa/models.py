@@ -1,13 +1,20 @@
 from django.db import models
 
+class CompetenciaPrograma(models.Model):
+    nombre = models.CharField(max_length=255)
+    descripcion = models.TextField()
 
-class TblCompetencia(models.Model):
-    comp_id = models.IntegerField(null=False)
-    tbl_comp_id = models.IntegerField(null=True)
-    comp_descripcion = models.CharField(null=True, max_length=250)
-    comp_tipo = models.CharField(null=True, max_length=50)
-    comp_nivel = models.CharField(null=True, max_length=50)
-    activo = models.BooleanField(default=True)
+    def __str__(self):
+        return self.nombre
 
-    class Meta:
-        db_table = 'TBL_COMPETENCIA'
+class ResultadoAprendizajePrograma(models.Model):
+    competencia = models.OneToOneField(
+        CompetenciaPrograma,
+        on_delete=models.CASCADE,
+        related_name='resultado_aprendizaje'
+    )
+    descripcion = models.TextField()
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"RA de {self.competencia.nombre}"
