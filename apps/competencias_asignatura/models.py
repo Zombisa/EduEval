@@ -11,12 +11,16 @@ class Asignatura(models.Model):
         return self.nombre
 
 class CompetenciaAsignatura(models.Model):
-    asignatura = models.ForeignKey(Asignatura, on_delete=models.CASCADE, related_name='competencias')
     nombre = models.CharField(max_length=255)
     descripcion = models.TextField()
+    asignatura = models.ForeignKey("Asignatura", on_delete=models.CASCADE, related_name="competencias")
+    
+    # NUEVO: relación con competencias del programa
+    competencias_programa = models.ManyToManyField(CompetenciaPrograma, related_name="competencias_asignatura")
 
     def __str__(self):
         return self.nombre
+
 
 class ResultadoAprendizajeAsignatura(models.Model):
     nombre = models.CharField(max_length=255, default="Nombre temporal")

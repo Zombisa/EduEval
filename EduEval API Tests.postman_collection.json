@@ -38,6 +38,37 @@
 			"response": []
 		},
 		{
+			"name": "Get Competencia de Programa",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"nombre\": \"Pensamiento Cr\\u00edtico\",\n  \"descripcion\": \"Capacidad para analizar y resolver problemas complejos.\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/competencias-programa/competencias/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"competencias-programa",
+						"competencias",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Crear Asignatura",
 			"request": {
 				"method": "POST",
@@ -75,7 +106,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"nombre\": \"Competencia de Cálculo\",\r\n  \"descripcion\": \"Interpreta y aplica derivadas.\",\r\n  \"asignatura\": 1,\r\n  \"resultado_aprendizaje\": {\r\n    \"nombre\": \"RA de derivadas\",\r\n    \"descripcion\": \"Aplica derivadas en contextos reales.\"\r\n  }\r\n}\r\n",
+					"raw": "{\r\n  \"nombre\": \"Competencia de Cálculo\",\r\n  \"descripcion\": \"Interpreta y aplica derivadas.\",\r\n  \"asignatura\": 1,\r\n  \"resultado_aprendizaje\": {\r\n    \"nombre\": \"RA de derivadas\",\r\n    \"descripcion\": \"Aplica derivadas en contextos reales.\"\r\n  },\r\n  \"competencias_programa\": [1]\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
