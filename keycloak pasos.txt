@@ -5,21 +5,23 @@
 2. iniciar sesión desde keycloak en el puerto http://localhost:8080
 3. crear un realm con el nombre EduEval
 4. crear un cliente con el id edueval-backend
+
+habilitar client authentication
+habilitar standard flow y direct acess grants
+
 Root URL: http://localhost:8000
 Valid redirect URIs: http://localhost:8000/oidc/callback/
 Valid post logout redirect URIs: http://localhost:8000/
 Web origins http://localhost:8000/
 Admin URL: http://localhost:8000/
-habilitar client authentication
-habilitar standard flow y direct acess grants
-5. crear roles dentro de edueval/backend
+5. crear roles dentro de edueval-backend
 	coordinador
 	evaluador
 	profesor
 6. editar .env y colocar
 #keycloak
 KEYCLOAK_CLIENT_ID=edueval-backend
-KEYCLOAK_CLIENT_SECRET=aLKyX938ZQ9zPcxoejfC0C7fvO8XVknk
+KEYCLOAK_CLIENT_SECRET=//AQUI VA EL SECRET
 KEYCLOAK_REALM=EduEval
 KEYCLOAK_BASE_URL=http://localhost:8080
 --
