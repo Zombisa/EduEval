@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 from decouple import config
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -48,8 +49,42 @@ INSTALLED_APPS = [
     'apps.autenticacion',
 ]
 
+# Keycloak OIDC Settings
+
+OIDC_RP_CLIENT_ID = config('KEYCLOAK_CLIENT_ID')
+OIDC_RP_CLIENT_SECRET = config('KEYCLOAK_CLIENT_SECRET')
+
+KEYCLOAK_REALM = config('KEYCLOAK_REALM')
+KEYCLOAK_BASE_URL = config('KEYCLOAK_BASE_URL')
+
+OIDC_RP_CLIENT_ID = config('KEYCLOAK_CLIENT_ID')
+OIDC_RP_CLIENT_SECRET = config('KEYCLOAK_CLIENT_SECRET')
+KEYCLOAK_BASE_URL = config('KEYCLOAK_BASE_URL')
+KEYCLOAK_REALM = config('KEYCLOAK_REALM')
+
+OIDC_OP_AUTHORIZATION_ENDPOINT = f"{KEYCLOAK_BASE_URL}/realms/{KEYCLOAK_REALM}/protocol/openid-connect/auth"
+OIDC_OP_TOKEN_ENDPOINT = f"{KEYCLOAK_BASE_URL}/realms/{KEYCLOAK_REALM}/protocol/openid-connect/token"
+OIDC_OP_USER_ENDPOINT = f"{KEYCLOAK_BASE_URL}/realms/{KEYCLOAK_REALM}/protocol/openid-connect/userinfo"
+OIDC_RP_SIGN_ALGO = 'RS256'
+OIDC_OP_JWKS_ENDPOINT = f"{KEYCLOAK_BASE_URL}/realms/{KEYCLOAK_REALM}/protocol/openid-connect/certs"
+
+
+
+LOGIN_URL = '/oidc/authenticate/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+
+INSTALLED_APPS += ['mozilla_django_oidc']
+AUTHENTICATION_BACKENDS = [
+    'apps.autenticacion.auth_backends.KeycloakOIDCBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'mozilla_django_oidc.auth.OIDCAuthenticationBackend',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
@@ -68,6 +103,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'edueval_backend.urls'
+
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000']
 
 TEMPLATES = [
     {

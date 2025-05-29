@@ -1,0 +1,28 @@
+1. descargar e ir en a la carpeta donde se descomprima, en mi caso C:\Program Files\Keycloak\keycloak-26.2.4\bin y ejecutar en el cmd
+	set KEYCLOAK_ADMIN=admin
+	set KEYCLOAK_ADMIN_PASSWORD=admin
+	kc.bat start-dev
+2. iniciar sesión desde keycloak en el puerto http://localhost:8080
+3. crear un realm con el nombre EduEval
+4. crear un cliente con el id edueval-backend
+Root URL: http://localhost:8000
+Valid redirect URIs: http://localhost:8000/oidc/callback/
+Valid post logout redirect URIs: http://localhost:8000/
+Web origins http://localhost:8000/
+Admin URL: http://localhost:8000/
+habilitar client authentication
+habilitar standard flow y direct acess grants
+5. crear roles dentro de edueval/backend
+	coordinador
+	evaluador
+	profesor
+6. editar .env y colocar
+#keycloak
+KEYCLOAK_CLIENT_ID=edueval-backend
+KEYCLOAK_CLIENT_SECRET=aLKyX938ZQ9zPcxoejfC0C7fvO8XVknk
+KEYCLOAK_REALM=EduEval
+KEYCLOAK_BASE_URL=http://localhost:8080
+--
+ESTE PASO ES IMPORTANTE: el KEYCLOAK_CLIENT_SECRET se debe configurar cada vez que se inicie el keycloak porque cambia siempre, esta clave se encuentra en 
+realms > EduEval > clientes > edueval-backend > credentials > Client Secret
+
