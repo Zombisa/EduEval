@@ -1,33 +1,33 @@
 from django.db import models
-from apps.competencias_programa.models import CompetenciaPrograma, ResultadoAprendizajePrograma
-
-class Asignatura(models.Model):
-    nombre = models.CharField(max_length=255)
-    descripcion = models.TextField()
-    creditos = models.PositiveIntegerField()
-    semestre = models.PositiveSmallIntegerField()
-
-    def __str__(self):
-        return self.nombre
 
 class CompetenciaAsignatura(models.Model):
-    nombre = models.CharField(max_length=255)
-    descripcion = models.TextField()
-    asignatura = models.ForeignKey("Asignatura", on_delete=models.CASCADE, related_name="competencias")
-    
-    # NUEVO: relación con competencias del programa
-    competencias_programa = models.ManyToManyField(CompetenciaPrograma, related_name="competencias_asignatura")
+    id_asignatura = models.IntegerField(default=0)
+    descripcion = models.TextField()    
+    # Nivel: 1 = Básico, 2 = Medio, 3 = Avanzado
+    nivel = models.PositiveIntegerField(
+        choices=[
+            (1, 'Básico'),
+            (2, 'Medio'),
+            (3, 'Avanzado'),
+        ],
+        default=1
+    )
 
     def __str__(self):
-        return self.nombre
-
+        return f"Competencia ({self.id_asignatura} - Nivel {self.get_nivel_display()})"
 
 class ResultadoAprendizajeAsignatura(models.Model):
-    nombre = models.CharField(max_length=255, default="Nombre temporal")
+    competencia = models.ForeignKey(
+        CompetenciaAsignatura,
+        related_name='resultados_aprendizaje',
+        on_delete=models.SET_NULL,  # Si se elimina la competencia, desvincula el RA (no lo elimina)
+        null=True,
+        blank=True
+    )
     descripcion = models.TextField()
+    activo = models.BooleanField(default=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
-    competencia = models.OneToOneField(CompetenciaAsignatura, on_delete=models.CASCADE, related_name='resultado_aprendizaje')
-    relacionados_programa = models.ManyToManyField('competencias_programa.ResultadoAprendizajePrograma', blank=True)
 
     def __str__(self):
-        return f"RA de {self.competencia.nombre}"
+        estado = "Activo" if self.activo else "Inactivo"
+        return f"RA ({'Sin competencia' if not self.competencia else self.competencia.id}) - {estado}"

@@ -1,22 +1,30 @@
 from rest_framework import serializers
-from .models import Asignatura, CompetenciaAsignatura, ResultadoAprendizajeAsignatura, CompetenciaPrograma
+from .models import CompetenciaAsignatura, ResultadoAprendizajeAsignatura
 
-class AsignaturaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Asignatura
-        fields = '__all__'
 
 class ResultadoAprendizajeAsignaturaSerializer(serializers.ModelSerializer):
-    competencia = serializers.PrimaryKeyRelatedField(read_only=True)
-
     class Meta:
         model = ResultadoAprendizajeAsignatura
-        fields = ['id', 'nombre', 'descripcion', 'fecha_creacion', 'competencia', 'relacionados_programa']
+        fields = [
+            'id',
+            'descripcion',
+            'activo',
+            'fecha_creacion',
+            'competencia'
+        ]
+        read_only_fields = ['id', 'fecha_creacion']
+
 
 class CompetenciaAsignaturaSerializer(serializers.ModelSerializer):
-    competencias_programa = serializers.PrimaryKeyRelatedField(
-        queryset=CompetenciaPrograma.objects.all(), many=True, required=False
-    )
+    resultados_aprendizaje = ResultadoAprendizajeAsignaturaSerializer(many=True, read_only=True)
+
     class Meta:
         model = CompetenciaAsignatura
-        fields = ['id', 'nombre', 'descripcion', 'asignatura', 'competencias_programa']
+        fields = [
+            'id',
+            'id_asignatura',
+            'descripcion',
+            'nivel',
+            'resultados_aprendizaje'
+        ]
+        read_only_fields = ['id']

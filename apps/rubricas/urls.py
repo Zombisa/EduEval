@@ -1,12 +1,18 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from .views import RubricaViewSet, CriterioViewSet, NivelViewSet
-
-router = DefaultRouter()
-router.register(r'rubricas', RubricaViewSet, basename='rubrica')
-router.register(r'criterios', CriterioViewSet, basename='criterio')
-router.register(r'niveles', NivelViewSet, basename='nivel')
+from django.urls import path
+from .views import (
+    CrearRubricaView,
+    ActualizarRubricaView,
+    ListarRubricasView,
+    ObtenerRubricaView,
+    EliminarRubricaView,
+    ListarNivelesDesempenoView
+)
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('crear/', CrearRubricaView.as_view(), name='crear_rubrica'),
+    path('actualizar/<int:rubrica_id>/', ActualizarRubricaView.as_view(), name='actualizar_rubrica'),
+    path('listar/', ListarRubricasView.as_view(), name='listar_rubricas'),
+    path('obtener/<int:id>/', ObtenerRubricaView.as_view(), name='obtener_rubrica'),
+    path('eliminar/<int:id>/', EliminarRubricaView.as_view(), name='eliminar_rubrica'),
+    path('niveles/', ListarNivelesDesempenoView.as_view(), name='listar_niveles_desempeno'),
 ]

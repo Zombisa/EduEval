@@ -1,15 +1,26 @@
-from rest_framework import viewsets
-from .models import Rubrica, Criterio, Nivel
-from .serializers import RubricaSerializer, CriterioSerializer, NivelSerializer
+from rest_framework.views import APIView
+from . import fachadas
 
-class RubricaViewSet(viewsets.ModelViewSet):
-    queryset = Rubrica.objects.all()
-    serializer_class = RubricaSerializer
+class CrearRubricaView(APIView):
+    def post(self, request):
+        return fachadas.crear_rubrica_con_criterios(request.data)
 
-class CriterioViewSet(viewsets.ModelViewSet):
-    queryset = Criterio.objects.all()
-    serializer_class = CriterioSerializer
+class ActualizarRubricaView(APIView):
+    def put(self, request, rubrica_id):
+        return fachadas.actualizar_rubrica_y_criterios(rubrica_id, request.data)
 
-class NivelViewSet(viewsets.ModelViewSet):
-    queryset = Nivel.objects.all()
-    serializer_class = NivelSerializer
+class ListarRubricasView(APIView):
+    def get(self, request):
+        return fachadas.listar_rubricas()
+
+class ObtenerRubricaView(APIView):
+    def get(self, request, id):
+        return fachadas.obtener_rubrica(id)
+
+class EliminarRubricaView(APIView):
+    def delete(self, request, id):
+        return fachadas.eliminar_rubrica(id)
+
+class ListarNivelesDesempenoView(APIView):
+    def get(self, request):
+        return fachadas.listar_niveles_desempeno()

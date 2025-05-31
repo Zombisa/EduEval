@@ -1,11 +1,22 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from .views import EvaluacionViewSet, DetalleEvaluacionViewSet
-
-router = DefaultRouter()
-router.register(r'evaluaciones', EvaluacionViewSet, basename='evaluacion')
-router.register(r'detalles', DetalleEvaluacionViewSet, basename='detalle-evaluacion')
+from django.urls import path
+from .views import (
+    EvaluacionCreateView,
+    EvaluacionListView,
+    EvaluacionRetrieveView,
+    EvaluacionUpdateView,
+    EvaluacionDeleteView,
+    EvaluacionListAllView,
+    NivelDesempenoListView,
+)
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('crear/', EvaluacionCreateView.as_view(), name='crear_evaluacion'),
+    path('listar/', EvaluacionListView.as_view(), name='listar_evaluaciones'),
+    path('listar-todas/', EvaluacionListAllView.as_view(), name='listar_todas_evaluaciones'),
+    path('<int:pk>/', EvaluacionRetrieveView.as_view(), name='detalle_evaluacion'),
+    path('actualizar/<int:pk>/', EvaluacionUpdateView.as_view(), name='actualizar_evaluacion'),
+    path('eliminar/<int:pk>/', EvaluacionDeleteView.as_view(), name='eliminar_evaluacion'),
+    
+    # Niveles de desempeño
+    path('niveles-desempeno/', NivelDesempenoListView.as_view(), name='listar_niveles_desempeno'),
 ]
