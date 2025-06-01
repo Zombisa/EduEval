@@ -1,9 +1,9 @@
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Evaluacion, ResultadoEvaluacion
-from .serializers import EvaluacionSerializer, ResultadoEvaluacionSerializer
-from apps.rubricas.models import Criterio, NivelDesempeno
-from apps.rubricas.serializers import NivelDesempenoSerializer
+from ..models.models import Evaluacion, ResultadoEvaluacion
+from ..DTO.serializers import EvaluacionSerializer, ResultadoEvaluacionSerializer
+from apps.rubricas.models.models import Criterio, NivelDesempeno
+from apps.rubricas.DTO.serializers import NivelDesempenoSerializer
 
 def crear_evaluacion(data):
     resultados_data = data.pop('resultados', [])

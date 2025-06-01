@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Evaluacion, ResultadoEvaluacion
+from ..models.models import Evaluacion, ResultadoEvaluacion
 
 class ResultadoEvaluacionSerializer(serializers.ModelSerializer):
     class Meta:

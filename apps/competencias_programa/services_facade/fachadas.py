@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework import status
-from .models import CompetenciaPrograma, ResultadoAprendizajePrograma
-from .serializers import (
+from ..models.models import CompetenciaPrograma, ResultadoAprendizajePrograma
+from ..DTO.serializers import (
     CompetenciaProgramaSerializer,
     ResultadoAprendizajeProgramaSerializer
 )
@@ -45,7 +45,7 @@ def listar_competencias_programa():
 def eliminar_competencia_programa(pk):
     try:
         competencia = CompetenciaPrograma.objects.get(pk=pk)
-        competencia.resultados_aprendizaje.update(competencia_programa=None)
+        competencia.resultados_aprendizaje.update(competencia=None)
         competencia.delete()
         return Response({"data": {"mensaje": "Competencia eliminada."}, "status": status.HTTP_200_OK})
     except CompetenciaPrograma.DoesNotExist:
@@ -79,7 +79,7 @@ def listar_resultados_aprendizaje_programa(incluir_inactivos=False):
 def desvincular_resultado_aprendizaje_programa(pk):
     try:
         resultado = ResultadoAprendizajePrograma.objects.get(pk=pk)
-        resultado.competencia_programa = None
+        resultado.competencia = None
         resultado.activo = False
         resultado.save()
         return Response({"data": {"mensaje": "Resultado de aprendizaje desvinculado."}, "status": status.HTTP_200_OK})

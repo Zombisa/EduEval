@@ -1,5 +1,5 @@
-from .models import CompetenciaAsignatura, ResultadoAprendizajeAsignatura
-from .serializers import CompetenciaAsignaturaSerializer, ResultadoAprendizajeAsignaturaSerializer
+from ..models.models import CompetenciaAsignatura, ResultadoAprendizajeAsignatura
+from ..DTO.serializers import CompetenciaAsignaturaSerializer, ResultadoAprendizajeAsignaturaSerializer
 from rest_framework.response import Response
 from rest_framework import status
 

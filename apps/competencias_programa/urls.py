@@ -1,7 +1,8 @@
 from django.urls import path
-from .views import (
+from .controllers.views import (
     CompetenciaProgramaCreateView,
     CompetenciaProgramaDeleteView,
+    CompetenciaProgramaListView,
     ResultadoAprendizajeProgramaCreateView,
     ResultadoAprendizajeProgramaListView,
     ResultadoAprendizajeProgramaDisableView,
@@ -12,6 +13,7 @@ from .views import (
 
 urlpatterns = [
     path('crear/', CompetenciaProgramaCreateView.as_view(), name='crear_competencia_programa'),
+    path('listar/', CompetenciaProgramaListView.as_view(), name='listar_competencias_programa'),
     path('eliminar/<int:pk>/', CompetenciaProgramaDeleteView.as_view(), name='eliminar_competencia_programa'),
 
     path('resultados-aprendizaje/crear/', ResultadoAprendizajeProgramaCreateView.as_view(), name='crear_ra_programa'),

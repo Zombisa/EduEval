@@ -6,4 +6,4 @@ class RubricasConfig(AppConfig):
     name = 'apps.rubricas'
 
     def ready(self):
-        import apps.rubricas.signals
+        import apps.rubricas.models.signals

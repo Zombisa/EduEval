@@ -1,0 +1,1183 @@
+{
+	"info": {
+		"_postman_id": "3d58e926-320b-4cbe-ba89-729bcf749173",
+		"name": "EduEval Full API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40286637"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Obtener token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {\r",
+									"  const json = pm.response.json();\r",
+									"  pm.environment.set(\"access_token\", json.access_token);\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "{{client_id}}",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "{{usuario}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{client_secret}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{keycloak_url}}/realms/{{realm}}/protocol/openid-connect/token/",
+							"host": [
+								"{{keycloak_url}}"
+							],
+							"path": [
+								"realms",
+								"{{realm}}",
+								"protocol",
+								"openid-connect",
+								"token",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Competencias Asignatura",
+			"item": [
+				{
+					"name": "Crear competencia",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id_asignatura\": 101,\n  \"descripcion\": \"Competencia de prueba\",\n  \"nivel\": 1,\n  \"resultados_aprendizaje\": [\n    {\n      \"descripcion\": \"Resultado de aprendizaje inicial\"\n    }\n  ]\n}\n"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/competencias-asignatura/crear/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"competencias-asignatura",
+								"crear",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar comperencia",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/competencias-asignatura/listar/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"competencias-asignatura",
+								"listar",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar competencia",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/competencias-asignatura/eliminar/1/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"competencias-asignatura",
+								"eliminar",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear RA",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"competencia\": 2,\n  \"descripcion\": \"Analiza muestras biol\\u00f3gicas\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/competencias-asignatura/resultados-aprendizaje/crear/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"competencias-asignatura",
+								"resultados-aprendizaje",
+								"crear",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar RA",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/competencias-asignatura/resultados-aprendizaje/listar/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"competencias-asignatura",
+								"resultados-aprendizaje",
+								"listar",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Desvincular RA",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/competencias-asignatura/resultados-aprendizaje/desvincular/1/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"competencias-asignatura",
+								"resultados-aprendizaje",
+								"desvincular",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar RA",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/competencias-asignatura/resultados-aprendizaje/eliminar/1/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"competencias-asignatura",
+								"resultados-aprendizaje",
+								"eliminar",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Editar RA",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"descripcion\": \"Identifica estructuras moleculares\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/competencias-asignatura/resultados-aprendizaje/editar/2/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"competencias-asignatura",
+								"resultados-aprendizaje",
+								"editar",
+								"2",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Copiar RA",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/competencias-asignatura/copiar-ra/1/a/2/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"competencias-asignatura",
+								"copiar-ra",
+								"1",
+								"a",
+								"2",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{access_token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Competencias Programa",
+			"item": [
+				{
+					"name": "Crear competencia",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id_programa\": 101,\n  \"descripcion\": \"Competencia de prueba\",\n  \"nivel\": 1,\n  \"resultados_aprendizaje\": [\n    {\n      \"descripcion\": \"Resultado de aprendizaje inicial\"\n    }\n  ]\n}\n"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/competencias-programa/crear/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"competencias-programa",
+								"crear",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar competencia",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/competencias-programa/listar/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"competencias-programa",
+								"listar",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar competencia",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/competencias-programa/eliminar/1/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"competencias-programa",
+								"eliminar",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear RA",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"competencia\": 1,\n  \"descripcion\": \"Reconoce bacterias en muestras\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/competencias-programa/resultados-aprendizaje/crear/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"competencias-programa",
+								"resultados-aprendizaje",
+								"crear",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar RA (activos)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/competencias-programa/resultados-aprendizaje/listar/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"competencias-programa",
+								"resultados-aprendizaje",
+								"listar",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar RA (todo)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/competencias-programa/resultados-aprendizaje/listar/?incluir_inactivos=true",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"competencias-programa",
+								"resultados-aprendizaje",
+								"listar",
+								""
+							],
+							"query": [
+								{
+									"key": "incluir_inactivos",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Desvincular RA",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/competencias-programa/resultados-aprendizaje/desvincular/2/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"competencias-programa",
+								"resultados-aprendizaje",
+								"desvincular",
+								"2",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar RA",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/competencias-programa/resultados-aprendizaje/eliminar/1/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"competencias-programa",
+								"resultados-aprendizaje",
+								"eliminar",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Editar RA",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"descripcion\": \"Describe procesos inmunol\\u00f3gicos\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/competencias-programa/resultados-aprendizaje/editar/2/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"competencias-programa",
+								"resultados-aprendizaje",
+								"editar",
+								"2",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Copiar RA",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/competencias-programa/copiar-ra/2/a/3/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"competencias-programa",
+								"copiar-ra",
+								"2",
+								"a",
+								"3",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{access_token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Rubricas",
+			"item": [
+				{
+					"name": "Crear rúbrica",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"R\\u00fabrica de Biolog\\u00eda\",\n  \"descripcion\": \"descripcion\",\n  \"criterios\": [\n    {\n      \"descripcion\": \"Precisi\\u00f3n en el laboratorio\",\n      \"ponderado\": 0.4\n    },\n    {\n      \"descripcion\": \"Interpretaci\\u00f3n de datos\",\n      \"ponderado\": 0.6\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/rubricas/crear/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"rubricas",
+								"crear",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar rúbrica",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"R\\u00fabrica de Bioqu\\u00edmica\",\n  \"criterios\": [\n    {\n      \"descripcion\": \"Manejo de equipos\",\n      \"ponderado\": 0.5\n    },\n    {\n      \"descripcion\": \"Redacci\\u00f3n de informe\",\n      \"ponderado\": 0.5\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/rubricas/actualizar/1/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"rubricas",
+								"actualizar",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar rúbricas",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/rubricas/listar/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"rubricas",
+								"listar",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener rúbrica",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/rubricas/obtener/1/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"rubricas",
+								"obtener",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar rúbrica",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/rubricas/eliminar/2/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"rubricas",
+								"eliminar",
+								"2",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{access_token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Niveles",
+			"item": [
+				{
+					"name": "Listar niveles",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/rubricas/niveles/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"rubricas",
+								"niveles",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{access_token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Evaluaciones",
+			"item": [
+				{
+					"name": "Crear evaluación",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"rubrica\": 1,\n  \"estudiante\": \"Andrea Lozano\",\n  \"evaluador\": \"Profa. Clara Ruiz\",\n  \"retroalimentacion\": \"Buen manejo de equipos. Puede mejorar en redacción.\",\n  \"resultados\": [\n    {\n      \"criterio\": 7,\n      \"nivel_seleccionado\": 3,\n      \"nota\": 4.8\n    },\n    {\n      \"criterio\": 8,\n      \"nivel_seleccionado\": 2,\n      \"nota\": 3.7\n    }\n  ]\n}\n"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/evaluaciones/crear/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"evaluaciones",
+								"crear",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar evaluación",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"rubrica\": 1,\n  \"estudiante\": \"Ana López\",\n  \"evaluador\": \"Juan Pérez\",\n  \"retroalimentacion\": \"Muy bien en todos los criterios\",\n  \"activo\": true,\n  \"resultados\": [\n    {\n      \"criterio\": 7,\n      \"nivel_seleccionado\": 1,\n      \"nota\": 4.0\n    },\n    {\n      \"criterio\": 8,\n      \"nivel_seleccionado\": 2,\n      \"nota\": 3.5\n    }\n  ]\n}\n"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/evaluaciones/actualizar/16/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"evaluaciones",
+								"actualizar",
+								"16",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar evaluaciones (activas)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/evaluaciones/listar/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"evaluaciones",
+								"listar",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar todas las evaluaciones",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/evaluaciones/listar-todas/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"evaluaciones",
+								"listar-todas",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener evaluación",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/evaluaciones/obtener/1/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"evaluaciones",
+								"obtener",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar evaluación",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/evaluaciones/eliminar/2/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"evaluaciones",
+								"eliminar",
+								"2",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{access_token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "keycloak_url",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "realm",
+			"value": "EduEval",
+			"type": "default"
+		},
+		{
+			"key": "base_url",
+			"value": "localhost:8000",
+			"type": "default"
+		},
+		{
+			"key": "client_secret",
+			"value": "aLKyX938ZQ9zPcxoejfC0C7fvO8XVknk",
+			"type": "default"
+		},
+		{
+			"key": "client_id",
+			"value": "edueval-backend",
+			"type": "default"
+		}
+	]
+}

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CompetenciaPrograma, ResultadoAprendizajePrograma
+from ..models.models import CompetenciaPrograma, ResultadoAprendizajePrograma
 
 
 class ResultadoAprendizajeProgramaSerializer(serializers.ModelSerializer):

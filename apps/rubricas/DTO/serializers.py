@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Rubrica, Criterio, NivelDesempeno
+from ..models.models import Rubrica, Criterio, NivelDesempeno
 
 
 class NivelDesempenoSerializer(serializers.ModelSerializer):

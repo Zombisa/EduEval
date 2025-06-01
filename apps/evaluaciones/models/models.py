@@ -1,5 +1,5 @@
 from django.db import models
-from apps.rubricas.models import Rubrica, Criterio, NivelDesempeno
+from apps.rubricas.models.models import Rubrica, Criterio, NivelDesempeno
 
 class Evaluacion(models.Model):
     rubrica = models.ForeignKey(Rubrica, on_delete=models.CASCADE, related_name='evaluaciones')

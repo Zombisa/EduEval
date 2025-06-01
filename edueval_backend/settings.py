@@ -77,17 +77,18 @@ LOGOUT_REDIRECT_URL = '/'
 
 INSTALLED_APPS += ['mozilla_django_oidc']
 AUTHENTICATION_BACKENDS = [
-    'apps.autenticacion.auth_backends.KeycloakOIDCBackend',
+    'apps.autenticacion.services_facade.auth_backends.KeycloakOIDCAuthentication',
     'django.contrib.auth.backends.ModelBackend',
 ]
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'mozilla_django_oidc.auth.OIDCAuthenticationBackend',
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "apps.autenticacion.services_facade.auth_backends.KeycloakOIDCAuthentication",
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ]
 }
 
 
@@ -100,7 +101,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'middleware.keycloak_roles.KeycloakRoleMiddleware',
 ]
+
 
 ROOT_URLCONF = 'edueval_backend.urls'
 
