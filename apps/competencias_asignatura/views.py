@@ -4,6 +4,10 @@ from . import fachadas
 class CompetenciaAsignaturaCreateView(APIView):
     def post(self, request):
         return fachadas.crear_competencia_asignatura(request.data)
+    
+class CompetenciaAsignaturaListView(APIView):
+    def get(self, request):
+        return fachadas.listar_competencias_asignatura(request)
 
 class CompetenciaAsignaturaDeleteView(APIView):
     def delete(self, request, pk):
@@ -11,7 +15,7 @@ class CompetenciaAsignaturaDeleteView(APIView):
 
 class ResultadoAprendizajeAsignaturaCreateView(APIView):
     def post(self, request):
-        return fachadas.crear_resultado_aprendizaje_asignatura(request.data)
+        return fachadas.crear_resultado_aprendizaje(request.data)
 
 class ResultadoAprendizajeAsignaturaListView(APIView):
     def get(self, request):
@@ -19,16 +23,16 @@ class ResultadoAprendizajeAsignaturaListView(APIView):
         return fachadas.listar_resultados_aprendizaje_asignatura(incluir_inactivos)
 
 class ResultadoAprendizajeAsignaturaDisableView(APIView):
-    def post(self, request, pk):
-        return fachadas.desvincular_resultado_aprendizaje_asignatura(pk)
+    def patch(self, request, pk):
+        return fachadas.desvincular_resultado_aprendizaje(pk)
 
 class ResultadoAprendizajeAsignaturaDeleteView(APIView):
     def delete(self, request, pk):
-        return fachadas.eliminar_resultado_aprendizaje_asignatura(pk)
+        return fachadas.eliminar_resultado_aprendizaje(pk)
 
 class ResultadoAprendizajeAsignaturaUpdateView(APIView):
     def put(self, request, pk):
-        return fachadas.editar_resultado_aprendizaje_asignatura(pk, request.data)
+        return fachadas.actualizar_resultado_aprendizaje_asignatura(pk, request.data)
 
 class CopiarResultadoAprendizajeAsignaturaView(APIView):
     def post(self, request, resultado_id, competencia_id):

@@ -9,17 +9,11 @@ class Rubrica(models.Model):
 
 
 class NivelDesempeno(models.Model):
-    NIVEL_CHOICES = [
-        (1, 'Bajo'),
-        (2, 'Medio'),
-        (3, 'Alto'),
-    ]
-
-    nivel = models.PositiveSmallIntegerField(choices=NIVEL_CHOICES)
-    descripcion = models.TextField(blank=True, null=True)
+    nivel = models.PositiveIntegerField(unique=True)
+    descripcion = models.CharField(max_length=100, default="Sin descripción") 
 
     def __str__(self):
-        return dict(self.NIVEL_CHOICES).get(self.nivel, 'Desconocido')
+        return f"{self.get_nivel_display()} - {self.descripcion}"
 
 
 class Criterio(models.Model):

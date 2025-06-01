@@ -4,31 +4,41 @@ from rest_framework.response import Response
 from rest_framework import status
 
 def crear_competencia_asignatura(data):
+    resultados_data = data.pop('resultados_aprendizaje', [])
     serializer = CompetenciaAsignaturaSerializer(data=data)
     if serializer.is_valid():
         competencia = serializer.save()
-        ResultadoAprendizajeAsignatura.objects.create(
-            competencia=competencia,
-            descripcion="",
-            nivel=1,
-            activo=True
-        )
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        for resultado in resultados_data:
+            ResultadoAprendizajeAsignatura.objects.create(competencia=competencia, **resultado)
+        return Response(CompetenciaAsignaturaSerializer(competencia).data, status=status.HTTP_201_CREATED)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-def listar_competencias_asignatura():
+def listar_competencias_asignatura(request):
     competencias = CompetenciaAsignatura.objects.all()
     serializer = CompetenciaAsignaturaSerializer(competencias, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+def listar_resultados_aprendizaje_asignatura(request):
+    resultados = ResultadoAprendizajeAsignatura.objects.all()
+    serializer = ResultadoAprendizajeAsignaturaSerializer(resultados, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 def eliminar_competencia_asignatura(pk):
     try:
         competencia = CompetenciaAsignatura.objects.get(pk=pk)
-        competencia.resultados_aprendizaje.update(competencia=None)  # desvincula
-        competencia.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
     except CompetenciaAsignatura.DoesNotExist:
-        return Response({'error': 'No existe la competencia'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': 'Competencia no encontrada'}, status=status.HTTP_404_NOT_FOUND)
+
+    resultados = ResultadoAprendizajeAsignatura.objects.filter(competencia=competencia)
+    for resultado in resultados:
+        resultado.competencia = None
+        resultado.activo = False
+        resultado.save()
+
+    competencia.delete()
+    return Response({'mensaje': 'Competencia eliminada y resultados de aprendizaje desactivados'}, status=status.HTTP_200_OK)
+
     
 def crear_resultado_aprendizaje(data):
     serializer = ResultadoAprendizajeAsignaturaSerializer(data=data)
@@ -69,28 +79,31 @@ def actualizar_resultado_aprendizaje_asignatura(pk, data):
     try:
         resultado = ResultadoAprendizajeAsignatura.objects.get(pk=pk)
     except ResultadoAprendizajeAsignatura.DoesNotExist:
-        return {'error': 'Resultado no encontrado'}, 404
-
-    serializer = ResultadoAprendizajeAsignaturaSerializer(resultado, data=data)
+        return Response({'error': 'Resultado de aprendizaje no encontrado'}, status=404)
+    
+    serializer = ResultadoAprendizajeAsignaturaSerializer(resultado, data=data, partial=True)
     if serializer.is_valid():
         serializer.save()
-        return serializer.data, 200
-    return serializer.errors, 400
+        return Response(serializer.data, status=200)
+    else:
+        return Response(serializer.errors, status=400)
 
-def copiar_resultado_aprendizaje_asignatura(resultado_id, nueva_competencia_id):
+def copiar_resultado_aprendizaje_asignatura(resultado_id, competencia_id):
     try:
-        resultado_original = ResultadoAprendizajeAsignatura.objects.get(pk=resultado_id)
-        competencia_destino = CompetenciaAsignatura.objects.get(pk=nueva_competencia_id)
+        resultado = ResultadoAprendizajeAsignatura.objects.get(id=resultado_id)
+        competencia = CompetenciaAsignatura.objects.get(id=competencia_id)
     except ResultadoAprendizajeAsignatura.DoesNotExist:
-        return {'error': 'Resultado original no encontrado'}, 404
+        return Response({'error': 'Resultado de aprendizaje no encontrado'}, status=status.HTTP_404_NOT_FOUND)
     except CompetenciaAsignatura.DoesNotExist:
-        return {'error': 'Competencia destino no encontrada'}, 404
+        return Response({'error': 'Competencia no encontrada'}, status=status.HTTP_404_NOT_FOUND)
 
-    resultado_copiado = ResultadoAprendizajeAsignatura.objects.create(
-        competencia=competencia_destino,
-        descripcion=resultado_original.descripcion,
+    nuevo_resultado = ResultadoAprendizajeAsignatura.objects.create(
+        descripcion=resultado.descripcion,
+        competencia=competencia,
         activo=True
     )
-    serializer = ResultadoAprendizajeAsignaturaSerializer(resultado_copiado)
-    return serializer.data, 201
+
+    serializer = ResultadoAprendizajeAsignaturaSerializer(nuevo_resultado)
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 

@@ -4,7 +4,7 @@ from apps.rubricas.models import Rubrica, Criterio, NivelDesempeno
 class Evaluacion(models.Model):
     rubrica = models.ForeignKey(Rubrica, on_delete=models.CASCADE, related_name='evaluaciones')
     estudiante = models.CharField(max_length=255, default='desconocido')
-    evaluador_id = models.CharField(max_length=255, default='desconocido')
+    evaluador = models.CharField(max_length=255, default='desconocido')
     fecha = models.DateField(auto_now_add=True)
     retroalimentacion = models.TextField(blank=True)
     activo = models.BooleanField(default=True)

@@ -19,7 +19,7 @@ class ResultadoAprendizajeProgramaListView(APIView):
         return fachadas.listar_resultados_aprendizaje_programa(incluir_inactivos)
 
 class ResultadoAprendizajeProgramaDisableView(APIView):
-    def post(self, request, pk):
+    def patch(self, request, pk):
         return fachadas.desvincular_resultado_aprendizaje_programa(pk)
 
 class ResultadoAprendizajeProgramaDeleteView(APIView):

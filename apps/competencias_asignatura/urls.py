@@ -8,10 +8,12 @@ from .views import (
     ResultadoAprendizajeAsignaturaDeleteView,
     ResultadoAprendizajeAsignaturaUpdateView,
     CopiarResultadoAprendizajeAsignaturaView,
+    CompetenciaAsignaturaListView,
 )
 
 urlpatterns = [
     path('crear/', CompetenciaAsignaturaCreateView.as_view(), name='crear_competencia_asignatura'),
+    path('listar/', CompetenciaAsignaturaListView.as_view(), name='listar_competencias_asignatura'),
     path('eliminar/<int:pk>/', CompetenciaAsignaturaDeleteView.as_view(), name='eliminar_competencia_asignatura'),
     
     path('resultados-aprendizaje/crear/', ResultadoAprendizajeAsignaturaCreateView.as_view(), name='crear_ra_asignatura'),

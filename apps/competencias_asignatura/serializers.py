@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from .models import CompetenciaAsignatura, ResultadoAprendizajeAsignatura
 
-
 class ResultadoAprendizajeAsignaturaSerializer(serializers.ModelSerializer):
     class Meta:
         model = ResultadoAprendizajeAsignatura
@@ -16,7 +15,7 @@ class ResultadoAprendizajeAsignaturaSerializer(serializers.ModelSerializer):
 
 
 class CompetenciaAsignaturaSerializer(serializers.ModelSerializer):
-    resultados_aprendizaje = ResultadoAprendizajeAsignaturaSerializer(many=True, read_only=True)
+    resultados_aprendizaje = ResultadoAprendizajeAsignaturaSerializer(many=True, required=False)
 
     class Meta:
         model = CompetenciaAsignatura

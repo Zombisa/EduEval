@@ -30,3 +30,7 @@ class EvaluacionListAllView(APIView):  # Lista incluso las desactivadas
 class NivelDesempenoListView(APIView):
     def get(self, request):
         return fachadas.listar_niveles_desempeno()
+
+class EvaluacionRetrieveView(APIView):
+    def get(self, request, pk):
+        return fachadas.obtener_evaluacion(pk)

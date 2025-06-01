@@ -1,3 +1,4 @@
+from rest_framework.response import Response
 from rest_framework import status
 from .models import CompetenciaPrograma, ResultadoAprendizajePrograma
 from .serializers import (
@@ -9,23 +10,36 @@ from django.utils import timezone
 
 def crear_competencia_programa(data):
     try:
+        resultados_data = data.pop('resultados_aprendizaje', [])
+
         serializer = CompetenciaProgramaSerializer(data=data)
         if serializer.is_valid():
             competencia = serializer.save()
-            ResultadoAprendizajePrograma.objects.create(
-                competencia_programa=competencia,
-                descripcion="",
-                activo=True
-            )
-            return {"data": serializer.data, "status": status.HTTP_201_CREATED}
-        return {"data": serializer.errors, "status": status.HTTP_400_BAD_REQUEST}
-    except Exception as e:
-        return {"data": {"error": str(e)}, "status": status.HTTP_400_BAD_REQUEST}
 
+            # Usar resultados si fueron enviados
+            if resultados_data:
+                for resultado in resultados_data:
+                    ResultadoAprendizajePrograma.objects.create(
+                        competencia=competencia,
+                        descripcion=resultado.get('descripcion', ''),
+                        activo=True
+                    )
+            else:
+                # Si no se envió ninguno, crear uno vacío
+                ResultadoAprendizajePrograma.objects.create(
+                    competencia=competencia,
+                    descripcion="",
+                    activo=True
+                )
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 def listar_competencias_programa():
     competencias = CompetenciaPrograma.objects.all()
-    return CompetenciaProgramaSerializer(competencias, many=True).data
+    return Response(CompetenciaProgramaSerializer(competencias, many=True).data)
 
 
 def eliminar_competencia_programa(pk):
@@ -33,11 +47,11 @@ def eliminar_competencia_programa(pk):
         competencia = CompetenciaPrograma.objects.get(pk=pk)
         competencia.resultados_aprendizaje.update(competencia_programa=None)
         competencia.delete()
-        return {"data": {"mensaje": "Competencia eliminada."}, "status": status.HTTP_200_OK}
+        return Response({"data": {"mensaje": "Competencia eliminada."}, "status": status.HTTP_200_OK})
     except CompetenciaPrograma.DoesNotExist:
-        return {"data": {"error": "Competencia no encontrada."}, "status": status.HTTP_404_NOT_FOUND}
+        return Response({"data": {"error": "Competencia no encontrada."}, "status": status.HTTP_404_NOT_FOUND})
     except Exception as e:
-        return {"data": {"error": str(e)}, "status": status.HTTP_400_BAD_REQUEST}
+        return Response({"data": {"error": str(e)}, "status": status.HTTP_400_BAD_REQUEST})
 
 
 def crear_resultado_aprendizaje_programa(data):
@@ -45,18 +59,21 @@ def crear_resultado_aprendizaje_programa(data):
         serializer = ResultadoAprendizajeProgramaSerializer(data=data)
         if serializer.is_valid():
             serializer.save(fecha_creacion=timezone.now(), activo=True)
-            return {"data": serializer.data, "status": status.HTTP_201_CREATED}
-        return {"data": serializer.errors, "status": status.HTTP_400_BAD_REQUEST}
+            return Response({"data": serializer.data, "status": status.HTTP_201_CREATED})
+        return Response({"data": serializer.errors, "status": status.HTTP_400_BAD_REQUEST})
     except Exception as e:
-        return {"data": {"error": str(e)}, "status": status.HTTP_400_BAD_REQUEST}
+        return Response({"data": {"error": str(e)}, "status": status.HTTP_400_BAD_REQUEST})
 
 
-def listar_resultados_aprendizaje_programa(mostrar_todos=False):
-    if mostrar_todos:
+def listar_resultados_aprendizaje_programa(incluir_inactivos=False):
+    if incluir_inactivos:
         resultados = ResultadoAprendizajePrograma.objects.all()
     else:
         resultados = ResultadoAprendizajePrograma.objects.filter(activo=True)
-    return ResultadoAprendizajeProgramaSerializer(resultados, many=True).data
+
+    serializer = ResultadoAprendizajeProgramaSerializer(resultados, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 
 def desvincular_resultado_aprendizaje_programa(pk):
@@ -65,28 +82,28 @@ def desvincular_resultado_aprendizaje_programa(pk):
         resultado.competencia_programa = None
         resultado.activo = False
         resultado.save()
-        return {"data": {"mensaje": "Resultado de aprendizaje desvinculado."}, "status": status.HTTP_200_OK}
+        return Response({"data": {"mensaje": "Resultado de aprendizaje desvinculado."}, "status": status.HTTP_200_OK})
     except ResultadoAprendizajePrograma.DoesNotExist:
-        return {"data": {"error": "Resultado de aprendizaje no encontrado."}, "status": status.HTTP_404_NOT_FOUND}
+        return Response({"data": {"error": "Resultado de aprendizaje no encontrado."}, "status": status.HTTP_404_NOT_FOUND})
     except Exception as e:
-        return {"data": {"error": str(e)}, "status": status.HTTP_400_BAD_REQUEST}
+        return Response({"data": {"error": str(e)}, "status": status.HTTP_400_BAD_REQUEST})
 
 
 def eliminar_resultado_aprendizaje_programa(pk):
     try:
         resultado = ResultadoAprendizajePrograma.objects.get(pk=pk)
         resultado.delete()
-        return {"data": {"mensaje": "Resultado de aprendizaje eliminado."}, "status": status.HTTP_200_OK}
+        return Response({"data": {"mensaje": "Resultado de aprendizaje eliminado."}, "status": status.HTTP_200_OK})
     except ResultadoAprendizajePrograma.DoesNotExist:
-        return {"data": {"error": "Resultado de aprendizaje no encontrado."}, "status": status.HTTP_404_NOT_FOUND}
+        return Response({"data": {"error": "Resultado de aprendizaje no encontrado."}, "status": status.HTTP_404_NOT_FOUND})
     except Exception as e:
-        return {"data": {"error": str(e)}, "status": status.HTTP_400_BAD_REQUEST}
+        return Response({"data": {"error": str(e)}, "status": status.HTTP_400_BAD_REQUEST})
 
 def actualizar_resultado_aprendizaje_programa(pk, data):
     try:
         resultado = ResultadoAprendizajePrograma.objects.get(pk=pk)
     except ResultadoAprendizajePrograma.DoesNotExist:
-        return {'error': 'Resultado no encontrado'}, 404
+        return Response({'error': 'Resultado no encontrado'}, 404)
 
     serializer = ResultadoAprendizajeProgramaSerializer(resultado, data=data)
     if serializer.is_valid():
@@ -99,9 +116,9 @@ def copiar_resultado_aprendizaje_programa(resultado_id, nueva_competencia_id):
         resultado_original = ResultadoAprendizajePrograma.objects.get(pk=resultado_id)
         competencia_destino = CompetenciaPrograma.objects.get(pk=nueva_competencia_id)
     except ResultadoAprendizajePrograma.DoesNotExist:
-        return {'error': 'Resultado original no encontrado'}, 404
+        return Response({'error': 'Resultado original no encontrado'}, 404)
     except CompetenciaPrograma.DoesNotExist:
-        return {'error': 'Competencia destino no encontrada'}, 404
+        return Response({'error': 'Competencia destino no encontrada'}, 404)
 
     resultado_copiado = ResultadoAprendizajePrograma.objects.create(
         competencia=competencia_destino,
@@ -109,4 +126,26 @@ def copiar_resultado_aprendizaje_programa(resultado_id, nueva_competencia_id):
         activo=True
     )
     serializer = ResultadoAprendizajeProgramaSerializer(resultado_copiado)
-    return serializer.data, 201
+    return Response(serializer.data, 201)
+
+def editar_resultado_aprendizaje_programa(pk, data):
+    try:
+        resultado = ResultadoAprendizajePrograma.objects.get(pk=pk)
+    except ResultadoAprendizajePrograma.DoesNotExist:
+        return Response(
+            {"data": {"error": "Resultado de aprendizaje no encontrado."}},
+            status=status.HTTP_404_NOT_FOUND
+        )
+    
+    serializer = ResultadoAprendizajeProgramaSerializer(resultado, data=data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(
+            {"data": serializer.data},
+            status=status.HTTP_200_OK
+        )
+    else:
+        return Response(
+            {"data": {"error": serializer.errors}},
+            status=status.HTTP_400_BAD_REQUEST
+        )
