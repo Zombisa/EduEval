@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 from decouple import config
-
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,13 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-rsz(a3q+n@9easm-c$e-dpy@jy!k%%(_$diebljgiq@hue*xk('
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
+SECRET_KEY = config('SECRET_KEY')
 
 
 # Application definition
@@ -43,6 +42,8 @@ INSTALLED_APPS = [
     'corsheaders',
 
     'rest_framework',
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     'apps.competencias_programa',
     'apps.competencias_asignatura',
     'apps.rubricas',
@@ -50,47 +51,7 @@ INSTALLED_APPS = [
     'apps.autenticacion',
 ]
 
-# Keycloak OIDC Settings
 
-OIDC_RP_CLIENT_ID = config('KEYCLOAK_CLIENT_ID')
-OIDC_RP_CLIENT_SECRET = config('KEYCLOAK_CLIENT_SECRET')
-
-KEYCLOAK_REALM = config('KEYCLOAK_REALM')
-KEYCLOAK_BASE_URL = config('KEYCLOAK_BASE_URL')
-
-OIDC_RP_CLIENT_ID = config('KEYCLOAK_CLIENT_ID')
-OIDC_RP_CLIENT_SECRET = config('KEYCLOAK_CLIENT_SECRET')
-KEYCLOAK_BASE_URL = config('KEYCLOAK_BASE_URL')
-KEYCLOAK_REALM = config('KEYCLOAK_REALM')
-
-OIDC_OP_AUTHORIZATION_ENDPOINT = f"{KEYCLOAK_BASE_URL}/realms/{KEYCLOAK_REALM}/protocol/openid-connect/auth"
-OIDC_OP_TOKEN_ENDPOINT = f"{KEYCLOAK_BASE_URL}/realms/{KEYCLOAK_REALM}/protocol/openid-connect/token"
-OIDC_OP_USER_ENDPOINT = f"{KEYCLOAK_BASE_URL}/realms/{KEYCLOAK_REALM}/protocol/openid-connect/userinfo"
-OIDC_RP_SIGN_ALGO = 'RS256'
-OIDC_OP_JWKS_ENDPOINT = f"{KEYCLOAK_BASE_URL}/realms/{KEYCLOAK_REALM}/protocol/openid-connect/certs"
-
-
-
-LOGIN_URL = '/oidc/authenticate/'
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
-
-
-INSTALLED_APPS += ['mozilla_django_oidc']
-AUTHENTICATION_BACKENDS = [
-    'apps.autenticacion.services_facade.auth_backends.KeycloakOIDCAuthentication',
-    'django.contrib.auth.backends.ModelBackend',
-]
-
-
-REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "apps.autenticacion.services_facade.auth_backends.KeycloakOIDCAuthentication",
-    ],
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticated",
-    ]
-}
 
 
 
@@ -103,7 +64,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'middleware.keycloak_roles.KeycloakRoleMiddleware',
 ]
 
 
@@ -143,6 +103,23 @@ DATABASES = {
         'PORT': config('DB_PORT'),
     }
 }
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60), #tiempo de vida del token
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1), #tiempo de vida del token que renueva el token
+    'ROTATE_REFRESH_TOKENS': True, #un toquen de refrezco se usa y otro ya esta en su lugar
+    'BLACKLIST_AFTER_ROTATION': True, #un toquen de refrezco ya usado no se usa de nuevo
+    'AUTH_HEADER_TYPES': ('Bearer',), #encabezado obligatorio
+}
+
 
 
 
