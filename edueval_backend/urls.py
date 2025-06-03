@@ -1,15 +1,16 @@
-# urls.py limpio
 from django.contrib import admin
 from django.urls import path, include
+from apps.autenticacion.controllers.views import CustomTokenObtainPairView
 from edueval_backend.views import home, logout_view
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
+from rest_framework_simplejwt.views import TokenRefreshView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home),
-    
-    # JWT
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+
+    # JWT con roles personalizados
+    path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
     # Apps
