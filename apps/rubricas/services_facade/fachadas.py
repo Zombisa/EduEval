@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework import status
-from ..models.models import Rubrica, Criterio, NivelDesempeno, CompetenciasPrograma
+from ..models.models import Rubrica, Criterio, NivelDesempeno
 from ..DTO.serializers import RubricaSerializer, CriterioSerializer, NivelDesempenoSerializer
 
 def crear_rubrica_con_criterios(data):
