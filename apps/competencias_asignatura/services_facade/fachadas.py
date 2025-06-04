@@ -19,6 +19,17 @@ def listar_competencias_asignatura(request):
     serializer = CompetenciaAsignaturaSerializer(competencias, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+def obtener_competencia_asignatura(pk):
+    try:
+        competencia = CompetenciaAsignatura.objects.get(pk=pk)
+        serializer = CompetenciaAsignaturaSerializer(competencia)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except CompetenciaAsignatura.DoesNotExist:
+        return Response(
+            {"detail": "Competencia no encontrada."},
+            status=status.HTTP_404_NOT_FOUND
+        )
+
 def listar_resultados_aprendizaje_asignatura(request):
     resultados = ResultadoAprendizajeAsignatura.objects.all()
     serializer = ResultadoAprendizajeAsignaturaSerializer(resultados, many=True)

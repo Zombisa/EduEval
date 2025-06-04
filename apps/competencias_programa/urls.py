@@ -9,12 +9,14 @@ from .controllers.views import (
     ResultadoAprendizajeProgramaUpdateView,
     ResultadoAprendizajeProgramaDeleteView,
     CopiarResultadoAprendizajeProgramaView,
+    CompetenciaProgramaDetailView,
 )
 
 urlpatterns = [
     path('crear/', CompetenciaProgramaCreateView.as_view(), name='crear_competencia_programa'),
     path('listar/', CompetenciaProgramaListView.as_view(), name='listar_competencias_programa'),
     path('eliminar/<int:pk>/', CompetenciaProgramaDeleteView.as_view(), name='eliminar_competencia_programa'),
+    path('competencias-programa/<int:pk>/', CompetenciaProgramaDetailView.as_view(), name='competencia-programa-detail'),
 
     path('resultados-aprendizaje/crear/', ResultadoAprendizajeProgramaCreateView.as_view(), name='crear_ra_programa'),
     path('resultados-aprendizaje/listar/', ResultadoAprendizajeProgramaListView.as_view(), name='listar_ra_programa'),

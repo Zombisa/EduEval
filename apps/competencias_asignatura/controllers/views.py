@@ -12,6 +12,11 @@ class CompetenciaAsignaturaListView(APIView):
     def get(self, request):
         return fachadas.listar_competencias_asignatura(request)
 
+class CompetenciaAsignaturaDetailView(APIView):
+    permission_classes = [IsCoordinador]
+    def get(self, request, pk):
+        return fachadas.obtener_competencia_asignatura(pk)
+
 class CompetenciaAsignaturaDeleteView(APIView):
     permission_classes = [IsCoordinador | IsDocente]
     def delete(self, request, pk):

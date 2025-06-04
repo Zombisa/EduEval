@@ -41,6 +41,17 @@ def listar_competencias_programa():
     competencias = CompetenciaPrograma.objects.all()
     return Response(CompetenciaProgramaSerializer(competencias, many=True).data)
 
+def obtener_competencia_programa(pk):
+    try:
+        competencia = CompetenciaPrograma.objects.get(pk=pk)
+        serializer = CompetenciaProgramaSerializer(competencia)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except CompetenciaPrograma.DoesNotExist:
+        return Response(
+            {"detail": "Competencia no encontrada."},
+            status=status.HTTP_404_NOT_FOUND
+        )
+
 
 def eliminar_competencia_programa(pk):
     try:

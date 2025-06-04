@@ -16,6 +16,11 @@ class CompetenciaProgramaListView(APIView):
     permission_classes = [IsCoordinador]
     def get(self, request):
         return fachadas.listar_competencias_programa()
+    
+class CompetenciaProgramaDetailView(APIView):
+    permission_classes = [IsCoordinador]
+    def get(self, request, pk):
+        return fachadas.obtener_competencia_programa(pk)
 
 class ResultadoAprendizajeProgramaCreateView(APIView):
     permission_classes = [IsCoordinador]

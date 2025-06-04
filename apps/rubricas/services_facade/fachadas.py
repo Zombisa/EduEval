@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework import status
-from ..models.models import Rubrica, Criterio, NivelDesempeno
+from ..models.models import Rubrica, Criterio, NivelDesempeno, CompetenciasPrograma
 from ..DTO.serializers import RubricaSerializer, CriterioSerializer, NivelDesempenoSerializer
 
 def crear_rubrica_con_criterios(data):
@@ -48,6 +48,18 @@ def actualizar_rubrica_y_criterios(rubrica_id, data):
             return Response({'error': 'Criterio inválido', 'detalle': serializer_criterio.errors}, status=status.HTTP_400_BAD_REQUEST)
 
     return Response(RubricaSerializer(rubrica).data, status=status.HTTP_200_OK)
+
+def obtener_competencia_programa(pk):
+    try:
+        competencia = CompetenciaPrograma.objects.get(pk=pk)
+        serializer = CompetenciaProgramaSerializer(competencia)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except CompetenciaPrograma.DoesNotExist:
+        return Response(
+            {"detail": "Competencia no encontrada."},
+            status=status.HTTP_404_NOT_FOUND
+        )
+
 
 def listar_rubricas():
     rubricas = Rubrica.objects.all()
