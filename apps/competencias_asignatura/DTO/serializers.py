@@ -1,7 +1,10 @@
 from rest_framework import serializers
 from ..models.models import CompetenciaAsignatura, ResultadoAprendizajeAsignatura
+from apps.rubricas.DTO.serializers import RubricaSerializer
 
 class ResultadoAprendizajeAsignaturaSerializer(serializers.ModelSerializer):
+    rubrica = RubricaSerializer(read_only=True)
+    
     class Meta:
         model = ResultadoAprendizajeAsignatura
         fields = '__all__'
