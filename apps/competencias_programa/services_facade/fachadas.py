@@ -41,6 +41,23 @@ def listar_competencias_programa():
     competencias = CompetenciaPrograma.objects.all()
     return Response(CompetenciaProgramaSerializer(competencias, many=True).data)
 
+def obtener_competencia_programa_desde_ra(pk):
+    try:
+        ra = ResultadoAprendizajePrograma.objects.get(pk=pk)
+        competencia = ra.competencia
+        if competencia is None:
+            return Response({"detail": "Este RA no está asociado a ninguna competencia."}, status=status.HTTP_404_NOT_FOUND)
+        serializer = CompetenciaProgramaSerializer(competencia)
+        return Response(serializer.data)
+    except ResultadoAprendizajePrograma.DoesNotExist:
+        return Response({"detail": "Resultado de aprendizaje no encontrado."}, status=status.HTTP_404_NOT_FOUND)
+
+def listar_ra_por_competencia_programa(pk):
+    ra = ResultadoAprendizajePrograma.objects.filter(competencia_id=pk)
+    serializer = ResultadoAprendizajeProgramaSerializer(ra, many=True)
+    return Response(serializer.data)
+
+
 def obtener_competencia_programa(pk):
     try:
         competencia = CompetenciaPrograma.objects.get(pk=pk)

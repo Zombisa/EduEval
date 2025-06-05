@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from ..services_facade import fachadas
 from ..services_facade.permissions import IsCoordinador, IsDocente
+from ..models.models import ResultadoAprendizajeAsignatura
 
 class CompetenciaAsignaturaCreateView(APIView):
     permission_classes = [IsCoordinador | IsDocente]
@@ -52,3 +53,12 @@ class CopiarResultadoAprendizajeAsignaturaView(APIView):
     permission_classes = [IsCoordinador | IsDocente]
     def post(self, request, resultado_id, competencia_id):
         return fachadas.copiar_resultado_aprendizaje_asignatura(resultado_id, competencia_id)
+    
+class ResultadoAprendizajePorCompetenciaAsignaturaView(APIView):
+    def get(self, request, pk):
+        return fachadas.listar_ra_por_competencia_asignatura(pk)
+    
+class CompetenciaAsignaturaDesdeRAView(APIView):
+    def get(self, request, pk):
+        return fachadas.obtener_competencia_asignatura_desde_ra(pk)
+    

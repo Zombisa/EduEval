@@ -52,3 +52,13 @@ class CopiarResultadoAprendizajeProgramaView(APIView):
     permission_classes = [IsCoordinador]
     def post(self, request, resultado_id, competencia_id):
         return fachadas.copiar_resultado_aprendizaje_programa(resultado_id, competencia_id)
+
+class ResultadoAprendizajePorCompetenciaProgramaView(APIView):
+    def get(self, request, pk):
+        return fachadas.listar_ra_por_competencia_programa(pk)
+
+
+class CompetenciaProgramaDesdeRAView(APIView):
+    def get(self, request, pk):
+        return fachadas.obtener_competencia_programa_desde_ra(pk)   
+    
