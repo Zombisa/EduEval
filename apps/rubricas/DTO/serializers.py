@@ -31,7 +31,7 @@ class RubricaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Rubrica
-        fields = ['id', 'nombre', 'descripcion', 'criterios']
+        fields = '__all__'
 
     def validate_nombre(self, value):
         if not value.strip():

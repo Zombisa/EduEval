@@ -1,10 +1,17 @@
 from rest_framework import serializers
 from ..models.models import CompetenciaAsignatura, ResultadoAprendizajeAsignatura
+from apps.rubricas.models.models import Rubrica
 from apps.rubricas.DTO.serializers import RubricaSerializer
 
 class ResultadoAprendizajeAsignaturaSerializer(serializers.ModelSerializer):
     rubrica = RubricaSerializer(read_only=True)
-    
+    rubrica_id = serializers.PrimaryKeyRelatedField(
+        source='rubrica',
+        queryset=Rubrica.objects.all(),  # ✅ usa el modelo aquí
+        write_only=True,
+        required=False
+    )
+
     class Meta:
         model = ResultadoAprendizajeAsignatura
         fields = '__all__'

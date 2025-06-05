@@ -49,7 +49,7 @@ class ResultadoAprendizajeAsignatura(models.Model):
     null=True,
     blank=True,
     related_name='resultado_aprendizaje'
-    )
+    )   
 
     def clean(self):
         if not self.descripcion.strip():
