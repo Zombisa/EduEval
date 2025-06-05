@@ -177,3 +177,18 @@ def editar_resultado_aprendizaje_programa(pk, data):
             {"data": {"error": serializer.errors}},
             status=status.HTTP_400_BAD_REQUEST
         )
+    
+def listar_competencias_programa_por_programa(id_programa):
+    competencias = CompetenciaPrograma.objects.filter(id_programa=id_programa)
+    serializer = CompetenciaProgramaSerializer(competencias, many=True)
+    return Response(serializer.data)
+
+def listar_ra_programa_por_programa(id_programa):
+    ra = ResultadoAprendizajePrograma.objects.filter(competencia__id_programa=id_programa)
+    serializer = ResultadoAprendizajeProgramaSerializer(ra, many=True)
+    return Response(serializer.data)
+
+def listar_competencias_y_ra_programa_por_programa(id_programa):
+    competencias = CompetenciaPrograma.objects.filter(id_programa=id_programa)
+    serializer = CompetenciaProgramaSerializer(competencias, many=True)
+    return Response(serializer.data)

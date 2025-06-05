@@ -57,8 +57,18 @@ class ResultadoAprendizajePorCompetenciaProgramaView(APIView):
     def get(self, request, pk):
         return fachadas.listar_ra_por_competencia_programa(pk)
 
-
 class CompetenciaProgramaDesdeRAView(APIView):
     def get(self, request, pk):
         return fachadas.obtener_competencia_programa_desde_ra(pk)   
     
+class CompetenciasProgramaPorProgramaView(APIView):
+    def get(self, request, id_programa):
+        return fachadas.listar_competencias_programa_por_programa(id_programa)
+
+class RAProgramaPorProgramaView(APIView):
+    def get(self, request, id_programa):
+        return fachadas.listar_ra_programa_por_programa(id_programa)
+
+class CompetenciasYRAProgramaView(APIView):
+    def get(self, request, id_programa):
+        return fachadas.listar_competencias_y_ra_programa_por_programa(id_programa)

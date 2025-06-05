@@ -149,3 +149,17 @@ def asociar_programa_a_competencia_asignatura(pk, data):
     except CompetenciaAsignatura.DoesNotExist:
         return Response({"detail": "Competencia no encontrada"}, status=404)
 
+def listar_competencias_por_asignatura(id_asignatura):
+    comps = CompetenciaAsignatura.objects.filter(id_asignatura=id_asignatura)
+    serializer = CompetenciaAsignaturaSerializer(comps, many=True)
+    return Response(serializer.data)
+
+def listar_ra_por_asignatura(id_asignatura):
+    ra = ResultadoAprendizajeAsignatura.objects.filter(competencia__id_asignatura=id_asignatura)
+    serializer = ResultadoAprendizajeAsignaturaSerializer(ra, many=True)
+    return Response(serializer.data)
+
+def listar_competencias_y_ra_por_asignatura(id_asignatura):
+    competencias = CompetenciaAsignatura.objects.filter(id_asignatura=id_asignatura)
+    serializer = CompetenciaAsignaturaSerializer(competencias, many=True)
+    return Response(serializer.data)

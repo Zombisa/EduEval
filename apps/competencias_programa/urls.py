@@ -12,6 +12,9 @@ from .controllers.views import (
     CopiarResultadoAprendizajeProgramaView,
     CompetenciaProgramaDetailView,
     ResultadoAprendizajePorCompetenciaProgramaView,
+    CompetenciasProgramaPorProgramaView,
+    RAProgramaPorProgramaView,
+    CompetenciasYRAProgramaView,
 )
 
 urlpatterns = [
@@ -20,6 +23,10 @@ urlpatterns = [
     path('eliminar/<int:pk>/', CompetenciaProgramaDeleteView.as_view(), name='eliminar_competencia_programa'),
     path('desde-ra/<int:pk>/', CompetenciaProgramaDesdeRAView.as_view()),
     path('<int:pk>/', CompetenciaProgramaDetailView.as_view(), name='competencia-programa-detail'),
+
+    path('solo-competencias/<int:id_programa>/', CompetenciasProgramaPorProgramaView.as_view()),
+    path('solo-ra/<int:id_programa>/', RAProgramaPorProgramaView.as_view()),
+    path('completo/<int:id_programa>/', CompetenciasYRAProgramaView.as_view()),
 
     path('resultados-aprendizaje/crear/', ResultadoAprendizajeProgramaCreateView.as_view(), name='crear_ra_programa'),
     path('resultados-aprendizaje/listar/', ResultadoAprendizajeProgramaListView.as_view(), name='listar_ra_programa'),

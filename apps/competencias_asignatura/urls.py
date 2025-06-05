@@ -13,6 +13,9 @@ from .controllers.views import (
     ResultadoAprendizajePorCompetenciaAsignaturaView,
     CopiarResultadoAprendizajeAsignaturaView,
     AsociarProgramaACompetenciaAsignaturaView,
+    CompetenciasYRAAsignaturaView,
+    CompetenciasPorAsignaturaView,
+    RAporAsignaturaView,
 )
 
 urlpatterns = [
@@ -22,6 +25,10 @@ urlpatterns = [
     path('desde-ra/<int:pk>/', CompetenciaAsignaturaDesdeRAView.as_view()),
     path('eliminar/<int:pk>/', CompetenciaAsignaturaDeleteView.as_view(), name='eliminar_competencia_asignatura'),
     
+    path('solo-competencias/<int:id_asignatura>/', CompetenciasPorAsignaturaView.as_view()),
+    path('solo-ra/<int:id_asignatura>/', RAporAsignaturaView.as_view()),
+    path('completo/<int:id_asignatura>/', CompetenciasYRAAsignaturaView.as_view()),
+
     path('resultados-aprendizaje/crear/', ResultadoAprendizajeAsignaturaCreateView.as_view(), name='crear_ra_asignatura'),
     path('resultados-aprendizaje/listar/', ResultadoAprendizajeAsignaturaListView.as_view(), name='listar_ra_asignatura'),
     path('resultados-aprendizaje/desvincular/<int:pk>/', ResultadoAprendizajeAsignaturaDisableView.as_view(), name='desvincular_ra_asignatura'),
