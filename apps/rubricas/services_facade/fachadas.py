@@ -86,3 +86,30 @@ def listar_niveles_desempeno():
     niveles = NivelDesempeno.objects.all()
     serializer = NivelDesempenoSerializer(niveles, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+def listar_rubricas_por_ra(pk):
+    rubricas = Rubrica.objects.filter(resultado_aprendizaje_id=pk)
+    serializer = RubricaSerializer(rubricas, many=True)
+    return Response(serializer.data)
+
+def listar_criterios_por_rubrica(rubrica_id):
+    criterios = Criterio.objects.filter(rubrica_id=rubrica_id)
+    serializer = CriterioSerializer(criterios, many=True)
+    return Response(serializer.data)
+
+def agregar_criterio_a_rubrica(data):
+    serializer = CriterioSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+def vincular_rubrica_a_ra(rubrica_id, resultado_aprendizaje_id):
+    try:
+        rubrica = Rubrica.objects.get(pk=rubrica_id)
+        rubrica.resultado_aprendizaje_id = resultado_aprendizaje_id
+        rubrica.save()
+        serializer = RubricaSerializer(rubrica)
+        return Response(serializer.data, status=200)
+    except Rubrica.DoesNotExist:
+        return Response({"error": "Rúbrica no encontrada"}, status=404)

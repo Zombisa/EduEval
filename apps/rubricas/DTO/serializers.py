@@ -11,7 +11,7 @@ class NivelDesempenoSerializer(serializers.ModelSerializer):
 class CriterioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Criterio
-        fields = ['id', 'rubrica', 'descripcion', 'ponderado', 'nivel']
+        fields = '__all__'
 
 
 class RubricaSerializer(serializers.ModelSerializer):
@@ -20,3 +20,9 @@ class RubricaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rubrica
         fields = ['id', 'nombre', 'descripcion', 'criterios']
+
+class RubricaVincularRASerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Rubrica
+        fields = ['resultado_aprendizaje']
+

@@ -5,7 +5,11 @@ from .controllers.views import (
     ListarRubricasView,
     ObtenerRubricaView,
     EliminarRubricaView,
-    ListarNivelesDesempenoView
+    ListarNivelesDesempenoView,
+    RubricasPorRAAsignaturaView,
+    ListarCriteriosPorRubricaView,
+    AgregarCriterioView,
+    VincularRubricaAResultadoView,
 )
 
 urlpatterns = [
@@ -15,4 +19,9 @@ urlpatterns = [
     path('obtener/<int:id>/', ObtenerRubricaView.as_view(), name='obtener_rubrica'),
     path('eliminar/<int:id>/', EliminarRubricaView.as_view(), name='eliminar_rubrica'),
     path('niveles/', ListarNivelesDesempenoView.as_view(), name='listar_niveles_desempeno'),
+    path('por-ra-asignatura/<int:pk>/', RubricasPorRAAsignaturaView.as_view()),
+    path("criterios/por-rubrica/<int:rubrica_id>/", ListarCriteriosPorRubricaView.as_view()),
+    path("criterios/agregar/", AgregarCriterioView.as_view()),
+    path("vincular-a-ra/<int:rubrica_id>/", VincularRubricaAResultadoView.as_view()),
+
 ]

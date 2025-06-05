@@ -1,8 +1,16 @@
 from django.db import models
+from apps.competencias_asignatura.models.models import ResultadoAprendizajeAsignatura
 
 class Rubrica(models.Model):
     nombre = models.CharField(max_length=255)
     descripcion = models.TextField(blank=True, null=True)
+    resultado_aprendizaje = models.ForeignKey(
+        ResultadoAprendizajeAsignatura,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='rubricas'
+    )
 
     def __str__(self):
         return self.nombre
