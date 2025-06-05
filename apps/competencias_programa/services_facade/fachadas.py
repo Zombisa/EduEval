@@ -8,7 +8,7 @@ from ..DTO.serializers import (
 from django.utils import timezone
 
 
-def crear_competencia_programa(data):
+def crear_competencia_programa(data):    
     try:
         resultados_data = data.pop('resultados_aprendizaje', [])
 

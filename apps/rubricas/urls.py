@@ -10,6 +10,7 @@ from .controllers.views import (
     ListarCriteriosPorRubricaView,
     AgregarCriterioView,
     VincularRubricaAResultadoView,
+    ListarRubricasPorRAAsignaturaView,
 )
 
 urlpatterns = [
@@ -23,5 +24,5 @@ urlpatterns = [
     path("criterios/por-rubrica/<int:rubrica_id>/", ListarCriteriosPorRubricaView.as_view()),
     path("criterios/agregar/", AgregarCriterioView.as_view()),
     path("vincular-a-ra/<int:rubrica_id>/", VincularRubricaAResultadoView.as_view()),
-
+    path('por-ra-asignatura/<int:pk>/', ListarRubricasPorRAAsignaturaView.as_view()),
 ]

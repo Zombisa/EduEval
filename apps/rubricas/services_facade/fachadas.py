@@ -1,9 +1,24 @@
+"""
+Módulo de fachada para la gestión de rúbricas y criterios en el sistema EduEval.
+Incluye funciones para crear, actualizar, listar, eliminar y vincular rúbricas
+con resultados de aprendizaje, así como manejar criterios y niveles de desempeño.
+"""
 from rest_framework.response import Response
 from rest_framework import status
 from ..models.models import Rubrica, Criterio, NivelDesempeno
 from ..DTO.serializers import RubricaSerializer, CriterioSerializer, NivelDesempenoSerializer
 
+
 def crear_rubrica_con_criterios(data):
+    """
+    Crea una rúbrica con sus criterios asociados.
+    
+    Args:
+        data (dict): Diccionario que incluye los campos de la rúbrica y una lista de criterios.
+    
+    Returns:
+        Response: Objeto JSON con la rúbrica creada o errores de validación.
+    """
     criterios_data = data.pop('criterios', [])
     rubrica_serializer = RubricaSerializer(data=data)
     
@@ -23,6 +38,16 @@ def crear_rubrica_con_criterios(data):
     return Response(RubricaSerializer(rubrica).data, status=status.HTTP_201_CREATED)
 
 def actualizar_rubrica_y_criterios(rubrica_id, data):
+    """
+    Actualiza una rúbrica existente junto con sus criterios.
+    
+    Args:
+        rubrica_id (int): ID de la rúbrica a actualizar.
+        data (dict): Datos nuevos de la rúbrica y lista de criterios.
+    
+    Returns:
+        Response: Rúbrica actualizada o errores.
+    """
     try:
         rubrica = Rubrica.objects.get(id=rubrica_id)
     except Rubrica.DoesNotExist:
@@ -49,24 +74,27 @@ def actualizar_rubrica_y_criterios(rubrica_id, data):
 
     return Response(RubricaSerializer(rubrica).data, status=status.HTTP_200_OK)
 
-def obtener_competencia_programa(pk):
-    try:
-        competencia = CompetenciaPrograma.objects.get(pk=pk)
-        serializer = CompetenciaProgramaSerializer(competencia)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    except CompetenciaPrograma.DoesNotExist:
-        return Response(
-            {"detail": "Competencia no encontrada."},
-            status=status.HTTP_404_NOT_FOUND
-        )
-
-
 def listar_rubricas():
+    """
+    Lista todas las rúbricas del sistema.
+
+    Returns:
+        Response: Lista serializada de rúbricas.
+    """
     rubricas = Rubrica.objects.all()
     serializer = RubricaSerializer(rubricas, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 def obtener_rubrica(id):
+    """
+    Obtiene una rúbrica por su ID.
+
+    Args:
+        id (int): ID de la rúbrica.
+
+    Returns:
+        Response: Datos de la rúbrica o error.
+    """
     try:
         rubrica = Rubrica.objects.get(id=id)
         serializer = RubricaSerializer(rubrica)
@@ -75,6 +103,15 @@ def obtener_rubrica(id):
         return Response({'error': 'Rúbrica no encontrada'}, status=status.HTTP_404_NOT_FOUND)
 
 def eliminar_rubrica(id):
+    """
+    Elimina una rúbrica por su ID.
+
+    Args:
+        id (int): ID de la rúbrica.
+
+    Returns:
+        Response: Mensaje de confirmación o error.
+    """
     try:
         rubrica = Rubrica.objects.get(id=id)
         rubrica.delete()
@@ -83,21 +120,54 @@ def eliminar_rubrica(id):
         return Response({'error': 'Rúbrica no encontrada'}, status=status.HTTP_404_NOT_FOUND)
 
 def listar_niveles_desempeno():
+    """
+    Lista todos los niveles de desempeño disponibles.
+
+    Returns:
+        Response: Lista de niveles.
+    """
     niveles = NivelDesempeno.objects.all()
     serializer = NivelDesempenoSerializer(niveles, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 def listar_rubricas_por_ra(pk):
+    """
+    Lista todas las rúbricas asociadas a un Resultado de Aprendizaje.
+
+    Args:
+        pk (int): ID del RA.
+
+    Returns:
+        Response: Lista de rúbricas.
+    """
     rubricas = Rubrica.objects.filter(resultado_aprendizaje_id=pk)
     serializer = RubricaSerializer(rubricas, many=True)
     return Response(serializer.data)
 
 def listar_criterios_por_rubrica(rubrica_id):
+    """
+    Lista todos los criterios de una rúbrica específica.
+
+    Args:
+        rubrica_id (int): ID de la rúbrica.
+
+    Returns:
+        Response: Lista de criterios.
+    """
     criterios = Criterio.objects.filter(rubrica_id=rubrica_id)
     serializer = CriterioSerializer(criterios, many=True)
     return Response(serializer.data)
 
 def agregar_criterio_a_rubrica(data):
+    """
+    Agrega un nuevo criterio a una rúbrica existente.
+
+    Args:
+        data (dict): Datos del criterio.
+
+    Returns:
+        Response: Criterio creado o errores.
+    """
     serializer = CriterioSerializer(data=data)
     if serializer.is_valid():
         serializer.save()
@@ -105,6 +175,16 @@ def agregar_criterio_a_rubrica(data):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 def vincular_rubrica_a_ra(rubrica_id, resultado_aprendizaje_id):
+    """
+    Asocia una rúbrica ya existente a un resultado de aprendizaje.
+
+    Args:
+        rubrica_id (int): ID de la rúbrica.
+        resultado_aprendizaje_id (int): ID del resultado de aprendizaje.
+
+    Returns:
+        Response: Rúbrica actualizada o error.
+    """
     try:
         rubrica = Rubrica.objects.get(pk=rubrica_id)
         rubrica.resultado_aprendizaje_id = resultado_aprendizaje_id
@@ -113,3 +193,8 @@ def vincular_rubrica_a_ra(rubrica_id, resultado_aprendizaje_id):
         return Response(serializer.data, status=200)
     except Rubrica.DoesNotExist:
         return Response({"error": "Rúbrica no encontrada"}, status=404)
+
+def listar_rubricas_por_resultado_aprendizaje(ra_id):
+    rubricas = Rubrica.objects.filter(resultado_aprendizaje_id=ra_id)
+    serializer = RubricaSerializer(rubricas, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
