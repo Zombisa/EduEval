@@ -5,6 +5,7 @@ Estas vistas exponen endpoints REST que delegan la lógica a la capa de fachada.
 from rest_framework.views import APIView
 from ..services_facade import fachadas
 from ..services_facade.permissions import IsDocente, IsCoordinador
+from rest_framework.response import Response
 
 class CrearRubricaView(APIView):
     """
@@ -86,14 +87,13 @@ class AgregarCriterioView(APIView):
     def post(self, request):
         return fachadas.agregar_criterio_a_rubrica(request.data)
     
-class VincularRubricaAResultadoView(APIView):
-    """
-    PATCH api/rubricas/vincular-a-ra/<int:rubrica_id>/
-    Asocia una rúbrica existente a un resultado de aprendizaje de asignatura.
-    """
-    permission_classes = [IsDocente | IsCoordinador]    
-    def post(self, request, rubrica_id):
-        return fachadas.vincular_rubrica_a_ra(rubrica_id, request.data)   
+class VincularRubricaARaView(APIView):
+    permission_classes = [IsDocente | IsCoordinador]
+    def patch(self, request, ra_id):
+        rubrica_id = request.data.get("rubrica")
+        if not rubrica_id:
+            return Response({"error": "ID de rúbrica no proporcionado"}, status=400)
+        return fachadas.vincular_rubrica_a_ra(ra_id, rubrica_id)
 
 class ListarRubricasPorAsignaturaView(APIView):
     permission_classes = [IsDocente | IsCoordinador]

@@ -4,13 +4,7 @@ from ..models.models import CompetenciaAsignatura, ResultadoAprendizajeAsignatur
 class ResultadoAprendizajeAsignaturaSerializer(serializers.ModelSerializer):
     class Meta:
         model = ResultadoAprendizajeAsignatura
-        fields = [
-            'id',
-            'descripcion',
-            'activo',
-            'fecha_creacion',
-            'competencia'
-        ]
+        fields = '__all__'
         read_only_fields = ['id', 'fecha_creacion']
 
 

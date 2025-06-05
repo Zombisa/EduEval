@@ -55,26 +55,32 @@ class CopiarResultadoAprendizajeAsignaturaView(APIView):
         return fachadas.copiar_resultado_aprendizaje_asignatura(resultado_id, competencia_id)
     
 class ResultadoAprendizajePorCompetenciaAsignaturaView(APIView):
+    permission_classes = [IsCoordinador | IsDocente]
     def get(self, request, pk):
         return fachadas.listar_ra_por_competencia_asignatura(pk)
     
 class CompetenciaAsignaturaDesdeRAView(APIView):
+    permission_classes = [IsCoordinador | IsDocente]
     def get(self, request, pk):
         return fachadas.obtener_competencia_asignatura_desde_ra(pk)
     
 class AsociarProgramaACompetenciaAsignaturaView(APIView):
+    permission_classes = [IsCoordinador | IsDocente]
     def patch(self, request, pk):
         return fachadas.asociar_programa_a_competencia_asignatura(pk, request.data)
     
 class CompetenciasPorAsignaturaView(APIView):
+    permission_classes = [IsCoordinador | IsDocente]
     def get(self, request, id_asignatura):
         return fachadas.listar_competencias_por_asignatura(id_asignatura)
 
 class RAporAsignaturaView(APIView):
+    permission_classes = [IsCoordinador | IsDocente]
     def get(self, request, id_asignatura):
         return fachadas.listar_ra_por_asignatura(id_asignatura)
 
 class CompetenciasYRAAsignaturaView(APIView):
+    permission_classes = [IsCoordinador | IsDocente]
     def get(self, request, id_asignatura):
         return fachadas.listar_competencias_y_ra_por_asignatura(id_asignatura)
 

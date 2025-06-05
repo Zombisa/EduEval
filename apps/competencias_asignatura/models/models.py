@@ -21,13 +21,7 @@ class CompetenciaAsignatura(models.Model):
         ],
         default=1
     )
-    rubrica = models.ForeignKey(
-    Rubrica,
-    on_delete=models.SET_NULL,
-    null=True,
-    blank=True,
-    related_name='resultados_aprendizaje'
-    )
+    
 
 
     def __str__(self):
@@ -44,6 +38,13 @@ class ResultadoAprendizajeAsignatura(models.Model):
     descripcion = models.TextField()
     activo = models.BooleanField(default=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
+    rubrica = models.ForeignKey(
+    Rubrica,
+    on_delete=models.SET_NULL,
+    null=True,
+    blank=True,
+    related_name='resultados_aprendizaje'
+    )
 
     def __str__(self):
         estado = "Activo" if self.activo else "Inactivo"

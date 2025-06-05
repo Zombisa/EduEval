@@ -9,7 +9,7 @@ from .controllers.views import (
     RubricasPorRAAsignaturaView,
     ListarCriteriosPorRubricaView,
     AgregarCriterioView,
-    VincularRubricaAResultadoView,
+    VincularRubricaARaView,
     ListarRubricasPorAsignaturaView,
     RubricaPorRAView,
 )
@@ -24,7 +24,7 @@ urlpatterns = [
     path('por-ra-asignatura/<int:pk>/', RubricasPorRAAsignaturaView.as_view()),
     path("criterios/por-rubrica/<int:rubrica_id>/", ListarCriteriosPorRubricaView.as_view()),
     path("criterios/agregar/", AgregarCriterioView.as_view()),
-    path("vincular-a-ra/<int:rubrica_id>/", VincularRubricaAResultadoView.as_view()),
+    path('resultados-aprendizaje/vincular-rubrica/<int:ra_id>/', VincularRubricaARaView.as_view()),
     path("por-asignatura/<int:id_asignatura>/", ListarRubricasPorAsignaturaView.as_view()),
     path('por-ra/<int:ra_id>/', RubricaPorRAView.as_view(), name='rubrica_por_ra'),
 
