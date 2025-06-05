@@ -22,13 +22,13 @@ def crear_evaluacion(data):
         evaluacion = serializer.save()
 
         for resultado in resultados_data:
-            resultado_obj = ResultadoEvaluacion(
-                evaluacion=evaluacion,
-                criterio_id=resultado['criterio'],
-                nivel_seleccionado_id=resultado['nivel_seleccionado'],
-                nota=resultado['nota']
-            )
-            resultado_obj.save()
+            resultado['evaluacion'] = evaluacion.id
+            resultado_serializer = ResultadoEvaluacionSerializer(data=resultado)
+            if resultado_serializer.is_valid():
+                resultado_serializer.save()
+            else:
+                return Response({'error': 'Resultado inválido', 'detalle': resultado_serializer.errors},
+                                status=status.HTTP_400_BAD_REQUEST)
         return Response(EvaluacionSerializer(evaluacion).data, status=status.HTTP_201_CREATED)
 
     return Response({

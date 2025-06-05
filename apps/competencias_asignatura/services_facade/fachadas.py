@@ -6,13 +6,24 @@ from rest_framework import status
 def crear_competencia_asignatura(data):
     resultados_data = data.pop('resultados_aprendizaje', [])
     serializer = CompetenciaAsignaturaSerializer(data=data)
+
     if serializer.is_valid():
         competencia = serializer.save()
+
         for resultado in resultados_data:
-            ResultadoAprendizajeAsignatura.objects.create(competencia=competencia, **resultado)
+            resultado['competencia'] = competencia.id
+            resultado_serializer = ResultadoAprendizajeAsignaturaSerializer(data=resultado)
+            if resultado_serializer.is_valid():
+                resultado_serializer.save()
+            else:
+                return Response({
+                    'error': 'Resultado de aprendizaje inválido',
+                    'detalle': resultado_serializer.errors
+                }, status=status.HTTP_400_BAD_REQUEST)
+
         return Response(CompetenciaAsignaturaSerializer(competencia).data, status=status.HTTP_201_CREATED)
-    else:
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 def listar_competencias_asignatura(request):
     competencias = CompetenciaAsignatura.objects.all()

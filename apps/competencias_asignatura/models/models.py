@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from apps.competencias_programa.models.models import CompetenciaPrograma
 from apps.rubricas.models.models import Rubrica
@@ -21,8 +22,12 @@ class CompetenciaAsignatura(models.Model):
         ],
         default=1
     )
-    
 
+    def clean(self):
+            if self.id_asignatura <= 0:
+                raise ValidationError("El ID de asignatura debe ser un número positivo.")
+            if not self.descripcion.strip():
+                raise ValidationError("La descripción no puede estar vacía.")
 
     def __str__(self):
         return f"Competencia ({self.id_asignatura} - Nivel {self.get_nivel_display()})"
@@ -38,13 +43,17 @@ class ResultadoAprendizajeAsignatura(models.Model):
     descripcion = models.TextField()
     activo = models.BooleanField(default=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
-    rubrica = models.ForeignKey(
+    rubrica = models.OneToOneField(
     Rubrica,
     on_delete=models.SET_NULL,
     null=True,
     blank=True,
-    related_name='resultados_aprendizaje'
+    related_name='resultado_aprendizaje'
     )
+
+    def clean(self):
+        if not self.descripcion.strip():
+            raise ValidationError("La descripción del resultado de aprendizaje no puede estar vacía.")
 
     def __str__(self):
         estado = "Activo" if self.activo else "Inactivo"

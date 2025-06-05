@@ -191,9 +191,15 @@ def vincular_rubrica_a_ra(ra_id, rubrica_id):
     except Rubrica.DoesNotExist:
         return Response({"error": "Rúbrica no encontrada"}, status=404)
 
+    # Validar si la rúbrica ya está vinculada a otro RA
+    ya_vinculado = ResultadoAprendizajeAsignatura.objects.filter(rubrica=rubrica).exclude(pk=ra.pk).exists()
+    if ya_vinculado:
+        return Response({"error": "Esta rúbrica ya está vinculada a otro resultado de aprendizaje."}, status=400)
+
     ra.rubrica = rubrica
     ra.save()
     return Response({"mensaje": "Rúbrica vinculada correctamente al RA."}, status=200)
+
 
 def obtener_rubrica_por_ra(ra_id):
     try:

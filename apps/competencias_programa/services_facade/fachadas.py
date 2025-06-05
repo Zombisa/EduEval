@@ -8,7 +8,7 @@ from ..DTO.serializers import (
 from django.utils import timezone
 
 
-def crear_competencia_programa(data):    
+def crear_competencia_programa(data):
     try:
         resultados_data = data.pop('resultados_aprendizaje', [])
 
@@ -16,24 +16,21 @@ def crear_competencia_programa(data):
         if serializer.is_valid():
             competencia = serializer.save()
 
-            # Usar resultados si fueron enviados
-            if resultados_data:
-                for resultado in resultados_data:
-                    ResultadoAprendizajePrograma.objects.create(
-                        competencia=competencia,
-                        descripcion=resultado.get('descripcion', ''),
-                        activo=True
-                    )
-            else:
-                # Si no se envió ninguno, crear uno vacío
-                ResultadoAprendizajePrograma.objects.create(
-                    competencia=competencia,
-                    descripcion="",
-                    activo=True
-                )
+            for resultado in resultados_data:
+                resultado['competencia'] = competencia.id
+                resultado_serializer = ResultadoAprendizajeProgramaSerializer(data=resultado)
+                if resultado_serializer.is_valid():
+                    resultado_serializer.save()
+                else:
+                    return Response({
+                        'error': 'Resultado de aprendizaje inválido',
+                        'detalle': resultado_serializer.errors
+                    }, status=status.HTTP_400_BAD_REQUEST)
 
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(CompetenciaProgramaSerializer(competencia).data, status=status.HTTP_201_CREATED)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -144,17 +141,23 @@ def copiar_resultado_aprendizaje_programa(resultado_id, nueva_competencia_id):
         resultado_original = ResultadoAprendizajePrograma.objects.get(pk=resultado_id)
         competencia_destino = CompetenciaPrograma.objects.get(pk=nueva_competencia_id)
     except ResultadoAprendizajePrograma.DoesNotExist:
-        return Response({'error': 'Resultado original no encontrado'}, 404)
+        return Response({'error': 'Resultado original no encontrado'}, status=status.HTTP_404_NOT_FOUND)
     except CompetenciaPrograma.DoesNotExist:
-        return Response({'error': 'Competencia destino no encontrada'}, 404)
+        return Response({'error': 'Competencia destino no encontrada'}, status=status.HTTP_404_NOT_FOUND)
 
-    resultado_copiado = ResultadoAprendizajePrograma.objects.create(
-        competencia=competencia_destino,
-        descripcion=resultado_original.descripcion,
-        activo=True
-    )
-    serializer = ResultadoAprendizajeProgramaSerializer(resultado_copiado)
-    return Response(serializer.data, 201)
+    nuevo_data = {
+        'descripcion': resultado_original.descripcion,
+        'competencia': competencia_destino.id,
+        'activo': True
+    }
+
+    serializer = ResultadoAprendizajeProgramaSerializer(data=nuevo_data)
+    if serializer.is_valid():
+        resultado_copiado = serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    else:
+        return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
 
 def editar_resultado_aprendizaje_programa(pk, data):
     try:
