@@ -12,6 +12,7 @@ from .controllers.views import (
     ResultadoAprendizajeAsignaturaUpdateView,
     ResultadoAprendizajePorCompetenciaAsignaturaView,
     CopiarResultadoAprendizajeAsignaturaView,
+    AsociarProgramaACompetenciaAsignaturaView,
 )
 
 urlpatterns = [
@@ -28,4 +29,6 @@ urlpatterns = [
     path('resultados-aprendizaje/editar/<int:pk>/', ResultadoAprendizajeAsignaturaUpdateView.as_view(), name='editar_ra_asignatura'),
     path('ra-asignatura/por-competencia/<int:pk>/', ResultadoAprendizajePorCompetenciaAsignaturaView.as_view()),
     path('copiar-ra/<int:resultado_id>/a/<int:competencia_id>/', CopiarResultadoAprendizajeAsignaturaView.as_view(), name='copiar_ra_asignatura'),
+
+    path('asociar-programa/<int:pk>/', AsociarProgramaACompetenciaAsignaturaView.as_view()),
 ]

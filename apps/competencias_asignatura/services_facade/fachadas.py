@@ -133,4 +133,19 @@ def copiar_resultado_aprendizaje_asignatura(resultado_id, competencia_id):
     serializer = ResultadoAprendizajeAsignaturaSerializer(nuevo_resultado)
     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+def asociar_programa_a_competencia_asignatura(pk, data):
+    try:
+        competencia = CompetenciaAsignatura.objects.get(pk=pk)
+        id_programa = data.get("programa")
+        if not id_programa:
+            return Response({"detail": "Se requiere el ID del programa"}, status=400)
+
+        competencia.programa_id = id_programa
+        competencia.save()
+
+        serializer = CompetenciaAsignaturaSerializer(competencia)
+        return Response(serializer.data)
+
+    except CompetenciaAsignatura.DoesNotExist:
+        return Response({"detail": "Competencia no encontrada"}, status=404)
 

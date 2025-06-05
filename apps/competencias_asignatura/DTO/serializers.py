@@ -24,6 +24,8 @@ class CompetenciaAsignaturaSerializer(serializers.ModelSerializer):
             'id_asignatura',
             'descripcion',
             'nivel',
+            'programa',
             'resultados_aprendizaje'
         ]
         read_only_fields = ['id']
+

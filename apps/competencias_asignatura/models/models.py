@@ -1,6 +1,14 @@
 from django.db import models
+from apps.competencias_programa.models.models import CompetenciaPrograma
 
 class CompetenciaAsignatura(models.Model):
+    programa = models.ForeignKey(
+        CompetenciaPrograma,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='competencias_asignatura'
+    )
     id_asignatura = models.IntegerField(default=0)
     descripcion = models.TextField()    
     # Nivel: 1 = Básico, 2 = Medio, 3 = Avanzado
