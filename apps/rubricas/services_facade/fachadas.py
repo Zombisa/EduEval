@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from ..models.models import Rubrica, Criterio, NivelDesempeno
 from ..DTO.serializers import RubricaSerializer, CriterioSerializer, NivelDesempenoSerializer
-
+from apps.competencias_asignatura.models.models import ResultadoAprendizajeAsignatura
 
 def crear_rubrica_con_criterios(data):
     """
@@ -174,7 +174,7 @@ def agregar_criterio_a_rubrica(data):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-def vincular_rubrica_a_ra(rubrica_id, resultado_aprendizaje_id):
+def vincular_rubrica_a_ra(rubrica_id, data):
     """
     Asocia una rúbrica ya existente a un resultado de aprendizaje.
 
@@ -187,12 +187,17 @@ def vincular_rubrica_a_ra(rubrica_id, resultado_aprendizaje_id):
     """
     try:
         rubrica = Rubrica.objects.get(pk=rubrica_id)
-        rubrica.resultado_aprendizaje_id = resultado_aprendizaje_id
+        ra_id = data.get("ra_asignatura_id")
+        ra = ResultadoAprendizajeAsignatura.objects.get(pk=ra_id)
+        rubrica.resultado_aprendizaje = ra
         rubrica.save()
-        serializer = RubricaSerializer(rubrica)
-        return Response(serializer.data, status=200)
+        return Response({"message": "Rúbrica vinculada correctamente."}, status=status.HTTP_200_OK)
     except Rubrica.DoesNotExist:
-        return Response({"error": "Rúbrica no encontrada"}, status=404)
+        return Response({"error": "Rúbrica no encontrada."}, status=status.HTTP_404_NOT_FOUND)
+    except ResultadoAprendizajeAsignatura.DoesNotExist:
+        return Response({"error": "RA no encontrado."}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
     
     
 def listar_rubricas_por_asignatura(id_asignatura):

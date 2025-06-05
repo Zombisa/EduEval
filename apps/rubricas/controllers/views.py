@@ -91,10 +91,10 @@ class VincularRubricaAResultadoView(APIView):
     PATCH api/rubricas/vincular-a-ra/<int:rubrica_id>/
     Asocia una rúbrica existente a un resultado de aprendizaje de asignatura.
     """
-    permission_classes = [IsDocente | IsCoordinador]
-    def patch(self, request, rubrica_id):
-        ra_id = request.data.get("resultado_aprendizaje_id")
-        return fachadas.vincular_rubrica_a_ra(rubrica_id, ra_id)
+    permission_classes = [IsDocente | IsCoordinador]    
+    def post(self, request, rubrica_id):
+        return fachadas.vincular_rubrica_a_ra(rubrica_id, request.data)
+    
 
 
 class ListarRubricasPorRAAsignaturaView(APIView):
