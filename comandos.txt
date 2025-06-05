@@ -24,7 +24,10 @@ python manage.py makemigrations
 python manage.py migrate
 5.
 python manage.py createsuperuser
-6.
+6. para crear datos y usuarios
+python manage.py cargar_datos_demo
+python manage.py crear_usuarios_y_roles
+7.
 python manage.py runserver
 
 -----
