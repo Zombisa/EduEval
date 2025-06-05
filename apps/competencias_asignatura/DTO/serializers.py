@@ -4,10 +4,13 @@ from apps.rubricas.models.models import Rubrica
 from apps.rubricas.DTO.serializers import RubricaSerializer
 
 class ResultadoAprendizajeAsignaturaSerializer(serializers.ModelSerializer):
+    # Mostrar la rúbrica completa al hacer GET
     rubrica = RubricaSerializer(read_only=True)
+
+    # Permitir enviar solo el ID de la rúbrica al hacer POST o PUT
     rubrica_id = serializers.PrimaryKeyRelatedField(
         source='rubrica',
-        queryset=Rubrica.objects.all(),  # ✅ usa el modelo aquí
+        queryset=Rubrica.objects.all(),
         write_only=True,
         required=False
     )

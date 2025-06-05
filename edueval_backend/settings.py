@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'apps.rubricas',
     'apps.evaluaciones',
     'apps.autenticacion',
+    'apps.utils',
 ]
 
 

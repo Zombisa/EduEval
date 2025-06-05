@@ -221,3 +221,20 @@ def listar_rubricas_por_asignatura(id_asignatura):
 
     serializer = RubricaSerializer(rubricas, many=True)
     return Response(serializer.data)
+
+def crear_criterio_para_rubrica(data):
+    rubrica_id = data.get("rubrica")
+    if not rubrica_id:
+        return Response({"error": "Se requiere el ID de la rúbrica"}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        Rubrica.objects.get(pk=rubrica_id)
+    except Rubrica.DoesNotExist:
+        return Response({"error": "Rúbrica no encontrada"}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = CriterioSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

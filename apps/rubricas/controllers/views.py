@@ -2,6 +2,7 @@
 Controladores para la gestión de rúbricas, criterios y niveles de desempeño.
 Estas vistas exponen endpoints REST que delegan la lógica a la capa de fachada.
 """
+from rest_framework import generics
 from rest_framework.views import APIView
 from ..services_facade import fachadas
 from ..services_facade.permissions import IsDocente, IsCoordinador
@@ -110,3 +111,10 @@ class RubricaPorRAView(APIView):
 
     def get(self, request, ra_id):
         return fachadas.obtener_rubrica_por_ra(ra_id)
+    
+
+class CriterioCreateView(APIView):
+    permission_classes = [IsCoordinador | IsDocente]
+
+    def post(self, request):
+        return fachadas.crear_criterio_para_rubrica(request.data)

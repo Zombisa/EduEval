@@ -12,6 +12,7 @@ from .controllers.views import (
     VincularRubricaARaView,
     ListarRubricasPorAsignaturaView,
     RubricaPorRAView,
+    CriterioCreateView,
 )
 
 urlpatterns = [
@@ -27,5 +28,6 @@ urlpatterns = [
     path('resultados-aprendizaje/vincular-rubrica/<int:ra_id>/', VincularRubricaARaView.as_view()),
     path("por-asignatura/<int:id_asignatura>/", ListarRubricasPorAsignaturaView.as_view()),
     path('por-ra/<int:ra_id>/', RubricaPorRAView.as_view(), name='rubrica_por_ra'),
+    path('criterios/crear/', CriterioCreateView.as_view(), name='crear-criterio'),
 
 ]
