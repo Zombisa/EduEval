@@ -174,37 +174,25 @@ def agregar_criterio_a_rubrica(data):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-def vincular_rubrica_a_ra(rubrica_id, data):
-    """
-    Asocia una rúbrica ya existente a un resultado de aprendizaje.
-
-    Args:
-        rubrica_id (int): ID de la rúbrica.
-        resultado_aprendizaje_id (int): ID del resultado de aprendizaje.
-
-    Returns:
-        Response: Rúbrica actualizada o error.
-    """
+def vincular_rubrica_a_ra(ra_id, rubrica_id):
     try:
-        rubrica = Rubrica.objects.get(pk=rubrica_id)
-        ra_id = data.get("ra_asignatura_id")
         ra = ResultadoAprendizajeAsignatura.objects.get(pk=ra_id)
-        rubrica.resultado_aprendizaje = ra
-        rubrica.save()
-        return Response({"message": "Rúbrica vinculada correctamente."}, status=status.HTTP_200_OK)
-    except Rubrica.DoesNotExist:
-        return Response({"error": "Rúbrica no encontrada."}, status=status.HTTP_404_NOT_FOUND)
+        rubrica = Rubrica.objects.get(pk=rubrica_id)
+        ra.rubrica = rubrica
+        ra.save()
+        return Response({"message": "Rúbrica vinculada correctamente al resultado de aprendizaje."}, status=200)
     except ResultadoAprendizajeAsignatura.DoesNotExist:
-        return Response({"error": "RA no encontrado."}, status=status.HTTP_404_NOT_FOUND)
-    except Exception as e:
-        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-    
-    
-def listar_rubricas_por_asignatura(id_asignatura):
-    """
-    Retorna todas las rúbricas asociadas a los resultados de aprendizaje
-    que pertenecen a la asignatura con el id proporcionado.
-    """
-    rubricas = Rubrica.objects.filter(resultado_aprendizaje__id_asignatura=id_asignatura)
-    serializer = RubricaSerializer(rubricas, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({"error": "Resultado de aprendizaje no encontrado"}, status=404)
+    except Rubrica.DoesNotExist:
+        return Response({"error": "Rúbrica no encontrada"}, status=404)
+
+def obtener_rubrica_por_ra(ra_id):
+    try:
+        ra = ResultadoAprendizajeAsignatura.objects.get(pk=ra_id)
+        if ra.rubrica:
+            serializer = RubricaSerializer(ra.rubrica)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "Este RA no tiene rúbrica asignada."}, status=status.HTTP_204_NO_CONTENT)
+    except ResultadoAprendizajeAsignatura.DoesNotExist:
+        return Response({"error": "Resultado de aprendizaje no encontrado."}, status=status.HTTP_404_NOT_FOUND)

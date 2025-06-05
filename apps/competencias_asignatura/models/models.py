@@ -1,5 +1,6 @@
 from django.db import models
 from apps.competencias_programa.models.models import CompetenciaPrograma
+from apps.rubricas.models.models import Rubrica
 
 class CompetenciaAsignatura(models.Model):
     programa = models.ForeignKey(
@@ -20,6 +21,14 @@ class CompetenciaAsignatura(models.Model):
         ],
         default=1
     )
+    rubrica = models.ForeignKey(
+    Rubrica,
+    on_delete=models.SET_NULL,
+    null=True,
+    blank=True,
+    related_name='resultados_aprendizaje'
+    )
+
 
     def __str__(self):
         return f"Competencia ({self.id_asignatura} - Nivel {self.get_nivel_display()})"

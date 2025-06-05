@@ -93,18 +93,7 @@ class VincularRubricaAResultadoView(APIView):
     """
     permission_classes = [IsDocente | IsCoordinador]    
     def post(self, request, rubrica_id):
-        return fachadas.vincular_rubrica_a_ra(rubrica_id, request.data)
-    
-
-
-class ListarRubricasPorRAAsignaturaView(APIView):
-    permission_classes = [IsDocente | IsCoordinador]
-    """
-    GET /api/rubricas/por-ra-asignatura/<int:pk>/
-    Lista las rúbricas asociadas a un resultado de aprendizaje de asignatura (RA).
-    """
-    def get(self, request, pk):
-        return fachadas.listar_rubricas_por_resultado_aprendizaje(pk)
+        return fachadas.vincular_rubrica_a_ra(rubrica_id, request.data)   
 
 class ListarRubricasPorAsignaturaView(APIView):
     permission_classes = [IsDocente | IsCoordinador]
@@ -115,3 +104,9 @@ class ListarRubricasPorAsignaturaView(APIView):
     """
     def get(self, request, id_asignatura):
         return fachadas.listar_rubricas_por_asignatura(id_asignatura)
+
+class RubricaPorRAView(APIView):
+    permission_classes = [IsDocente | IsCoordinador]
+
+    def get(self, request, ra_id):
+        return fachadas.obtener_rubrica_por_ra(ra_id)
