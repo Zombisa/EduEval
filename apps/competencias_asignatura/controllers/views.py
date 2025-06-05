@@ -62,3 +62,8 @@ class CompetenciaAsignaturaDesdeRAView(APIView):
     def get(self, request, pk):
         return fachadas.obtener_competencia_asignatura_desde_ra(pk)
     
+class AsociarProgramaACompetenciaAsignaturaView(APIView):
+    def patch(self, request, pk):
+        return fachadas.asociar_programa_a_competencia_asignatura(pk, request.data)
+
+    
