@@ -142,7 +142,7 @@ def listar_rubricas_por_ra(pk):
     """
     rubricas = Rubrica.objects.filter(resultado_aprendizaje_id=pk)
     serializer = RubricaSerializer(rubricas, many=True)
-    return Response(serializer.data)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 def listar_criterios_por_rubrica(rubrica_id):
     """
@@ -193,8 +193,13 @@ def vincular_rubrica_a_ra(rubrica_id, resultado_aprendizaje_id):
         return Response(serializer.data, status=200)
     except Rubrica.DoesNotExist:
         return Response({"error": "Rúbrica no encontrada"}, status=404)
-
-def listar_rubricas_por_resultado_aprendizaje(ra_id):
-    rubricas = Rubrica.objects.filter(resultado_aprendizaje_id=ra_id)
+    
+    
+def listar_rubricas_por_asignatura(id_asignatura):
+    """
+    Retorna todas las rúbricas asociadas a los resultados de aprendizaje
+    que pertenecen a la asignatura con el id proporcionado.
+    """
+    rubricas = Rubrica.objects.filter(resultado_aprendizaje__id_asignatura=id_asignatura)
     serializer = RubricaSerializer(rubricas, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)

@@ -105,3 +105,13 @@ class ListarRubricasPorRAAsignaturaView(APIView):
     """
     def get(self, request, pk):
         return fachadas.listar_rubricas_por_resultado_aprendizaje(pk)
+
+class ListarRubricasPorAsignaturaView(APIView):
+    permission_classes = [IsDocente | IsCoordinador]
+    """
+    GET /api/rubricas/por-asignatura/<int:id_asignatura>/
+    Lista todas las rúbricas asociadas a los resultados de aprendizaje 
+    de la asignatura con ese ID.
+    """
+    def get(self, request, id_asignatura):
+        return fachadas.listar_rubricas_por_asignatura(id_asignatura)
